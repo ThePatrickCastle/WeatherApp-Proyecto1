@@ -2,4 +2,4 @@
 Repositorio para la aplicación del primer proyecto Modelado y Programación
 #### Contribuyen: 
 - Moreno Delgado Luis Angel
-
+- Salgado González Edgar 
