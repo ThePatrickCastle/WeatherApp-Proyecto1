@@ -41,3 +41,8 @@ recomendacion2 = Recommendations(18.8333, -98)
 
 print(recomendacion1.get_recommendations())
 print(recomendacion2.get_recommendations())
+
+ciudad_usuario = input("Ingresa una ciudad:")
+
+recomendacion3 = Recommendations(ciudad_usuario)
+print(recomendacion3.get_recommendations())
