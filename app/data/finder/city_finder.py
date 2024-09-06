@@ -1,12 +1,12 @@
 import csv
-from inputCorrector import InputCorrector
+from input_corrector import InputCorrector
 
 class CityFinder:
     def __init__(self, csv_file):
         self.csv_file = csv_file
-        self.cities = self.load_cities()
+        self.cities = self.load_cities()  # Cambié a load_cities para coincidir con el nombre del método.
 
-    def carga_ciudades(self):
+    def load_cities(self):
         '''Carga todas las ciudades de la columna 'destination' en el archivo CSV.'''
         cities = []
         with open(self.csv_file, mode='r') as file:
@@ -22,13 +22,4 @@ class CityFinder:
         if best_match:
             return best_match.capitalize()  # Devuelve el nombre de la ciudad en formato capitalizado
         else:
-            return "City not found."
-
-# Uso del programa
-city_finder = CityFinder('dataset1.csv')
-
-# Ejemplo de búsqueda de una ciudad
-input_string = "montery"  # Reemplaza con la cadena que deseas buscar
-print(city_finder.find_city(input_string))
-    
-    
+            return "Ciudad no encontrada."
