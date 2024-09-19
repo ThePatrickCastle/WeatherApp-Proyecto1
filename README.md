@@ -48,8 +48,11 @@ Weather App is a Python-based desktop application that provides real-time weathe
     ```
 
 6. Run the app:
+	```bash
+    cd ./app
+    ```
     ```bash
-    python ./app/main_window.py
+    python ./main_window.py
     ```
 
 ## License Agreement
