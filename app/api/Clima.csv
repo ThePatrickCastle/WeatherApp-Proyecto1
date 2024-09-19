@@ -1,2 +1,3 @@
 ciudad,country,name,lat,lon,weather_main,temp,feels_like,humidity,wind_speed
 Monterrey,MX,Monterrey,25.6667,-100.3167,Clouds,300.12,302.92,81,2.97
+Monterey,US,Monterey,36.2505,-121.2516,Clear,290.88,289.83,43,5.96

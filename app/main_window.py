@@ -57,9 +57,9 @@ class MainWindow(QMainWindow):
         tabinicial = QGridLayout()
         barrasuperior = QHBoxLayout()
         barrabuscadora = QHBoxLayout()
-        self.setWindowTitle(" Weather App ")
-        logo = QLabel(" Weather Recommendations ")
-        logo.setFont(QFont('Times', 50))
+        self.setWindowTitle("AeroNimbus!")
+        logo = QLabel("AeroNimbus!")
+        logo.setFont(QFont('Helvetica', 50))
         logo.setAlignment(Qt.AlignLeft | Qt. AlignVCenter)
         imagenlogo = QLabel(" Imagen logo")
 
@@ -201,28 +201,72 @@ class MainWindow(QMainWindow):
 
         ventanadeciudad = QGridLayout()
         nombreciudad = QLabel(cadenaLimpia)
-        nombreciudad.setFont(QFont('Times', 20))
+        nombreciudad.setFont(QFont('Times', 20, QFont.Bold))
         nombreciudad.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        ventanadeciudad.addWidget(nombreciudad, 0, 1)
+        nombreciudad.setStyleSheet("color: #2E4053; padding: 10px;")
+        
+        #ventanadeciudad.addWidget(nombreciudad, 0, 1)
         textoclimas = QLabel(f" Información de {cadenaLimpia} ")
         textoclimas.setFont(QFont('Times', 20))
         textoclimas.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        ventanadeciudad.addWidget(textoclimas, 1, 0)
+        textoclimas.setStyleSheet("background-color: #ECF0F1; padding: 5px; border-radius: 5px;")
+        
+       # ventanadeciudad.addWidget(textoclimas, 1, 0)
         textorecomendaciones = QLabel(" Recomendaciones: ")
         textorecomendaciones.setFont(QFont('Times', 20))
         textorecomendaciones.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        ventanadeciudad.addWidget(textorecomendaciones, 1, 1)
-        listaclimas = QListWidget()
-        listarecomendar = QListWidget()
-        ventanadeciudad.addWidget(listaclimas, 2, 0)
-        ventanadeciudad.addWidget(listarecomendar, 2, 1)
+        textorecomendaciones.setStyleSheet("background-color: #ECF0F1; padding: 5px; border-radius: 5px;")
+        
+        ventanadeciudad.addWidget(nombreciudad, 1, 1)
+        ventanadeciudad.addWidget(textoclimas, 2, 0)
+        ventanadeciudad.addWidget(textorecomendaciones, 2, 1)
 
+        listaclimas = QListWidget()
+        listaclimas.setStyleSheet("""
+        QListWidget {
+            border: 1px solid #3498DB;
+            background-color: #F7F9F9;
+            border-radius: 8px;
+            padding: 5px;
+        }
+        QListWidget::item {
+            padding: 10px;
+            color: #2C3E50;
+        }
+        QListWidget::item:selected {
+            background-color: #85C1E9;
+            color: #FFFFFF;
+        }
+    """)
+        listarecomendar = QListWidget()
+        listarecomendar.setStyleSheet("""
+        QListWidget {
+            border: 1px solid #1ABC9C;
+            background-color: #F2F4F4;
+            border-radius: 8px;
+            padding: 5px;
+        }
+        QListWidget::item {
+            padding: 10px;
+            color: #2C3E50;
+        }
+        QListWidget::item:selected {
+            background-color: #48C9B0;
+            color: #FFFFFF;
+        }
+    """)
+
+        ventanadeciudad.setSpacing(20)
+        ventanadeciudad.setContentsMargins(10,10,10,10)
+        
         for info in informacion_ciudad:
             listaclimas.addItem(info)
 
         for recommendation in recomendaciones_ciudad:
             listarecomendar.addItem(recommendation)
 
+        ventanadeciudad.addWidget(listaclimas, 2, 0)
+        ventanadeciudad.addWidget(listarecomendar, 2, 1)
         return ventanadeciudad
 
     def null_tipo_busqueda(self):
