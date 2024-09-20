@@ -3,7 +3,7 @@ Modulo Interacción entre el usuario y la aplicación, así como las acciones qu
 Author: @Edgar Salgado González
 Contributor: @ThePatrickCastle
 Contributor: @C4mdax
-Version 1.0
+Version 1.1.0
 
 '''
 
@@ -38,54 +38,16 @@ class MainWindow(QMainWindow):
         self.tipodebusqueda = 0
         self.cadenabuscar = ""
         self.numerotabs = 0
-
-        self.setFixedSize(1300, 700)
-        
         self.tabPrincipal = QStackedLayout()
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle("AreoNimbus!")
-        self.setStyleSheet("""
-            QMainWindow {
-                background-color: #1a1e36;
-            }
-            QLabel {
-                color: #FFFFFF;
-            }
-            QPushButton {
-                background-color: #2980B9;
-        color: white;
-                border-radius: 9px;
-                padding: 10px;
-            }
-            QPushButton:hover {
-                background-color: #0f1326;
-            }
-            QLineEdit {
-                border: 0px solid #e9d714;
-                border-radius: 10px;
-                padding: 5px;
-            }
-            QComboBox {
-                border: 0px solid #e9d714;
-                border-radius: 10px;
-                padding: 5px;
-            }
-        """)
         tabdesplegado = self.creador_tab()
         capainicial = QWidget()
         capainicial.setLayout(tabdesplegado)
         self.tabPrincipal.addWidget(capainicial)
-        
-        #tamaño
-        screen = QApplication.primaryScreen().geometry()
-        self.resize(int(screen.width() * 0.6), int(screen.height() * 0.6))
-
         capafinal = QWidget()
         capafinal.setLayout(self.tabPrincipal)
         self.setCentralWidget(capafinal)
-
+        self.setMinimumSize(1000, 700)
+        self.setMaximumSize(1000, 700)
     def creador_tab(self):
         '''
         @func creador_tab crea una nueva tab con el sub-menú ya desplegado o sin desplegar, por
@@ -95,9 +57,9 @@ class MainWindow(QMainWindow):
         tabinicial = QGridLayout()
         barrasuperior = QHBoxLayout()
         barrabuscadora = QHBoxLayout()
-        self.setWindowTitle("AirNimbus")
-        logo = QLabel("AirNimbus")
-        logo.setFont(QFont('BebasNeue', 80))
+        self.setWindowTitle(" Weather App ")
+        logo = QLabel(" Weather Recommendations ")
+        logo.setFont(QFont('Times', 50))
         logo.setAlignment(Qt.AlignLeft | Qt. AlignVCenter)
         imagenlogo = QLabel(" Imagen logo")
 
@@ -108,8 +70,8 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.15)
         height_20_percent = int(screen_height * 0.15)
 
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/airnimbus_simple.png"))
-        imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
+        imagenlogoeditable = QPixmap(os.path.join(basedir + "./ui/resources/weather_app_logo_sin_fondo.png"))
+        Imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(imagenlogoeditable)
         imagenlogo.setAlignment(Qt.AlignCenter)
@@ -131,7 +93,6 @@ class MainWindow(QMainWindow):
         botonbuscar.pressed.connect(self.realizar_busqueda)
         barrabuscadora.addWidget(botonbuscar)
         return tabinicial
-
     def cambiar_tipo_busqueda(self, indice):
         '''
         @func cambiar_tipo_busqueda hace que al seleccionar uno de los dos tipos de busqueda desde la QComboBox listadebusqueda
@@ -240,72 +201,28 @@ class MainWindow(QMainWindow):
 
         ventanadeciudad = QGridLayout()
         nombreciudad = QLabel(cadenaLimpia)
-        nombreciudad.setFont(QFont('Times', 20, QFont.Bold))
+        nombreciudad.setFont(QFont('Times', 20))
         nombreciudad.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        nombreciudad.setStyleSheet("color: #2E4053; padding: 10px;")
-        
-        #ventanadeciudad.addWidget(nombreciudad, 0, 1)
+        ventanadeciudad.addWidget(nombreciudad, 0, 1)
         textoclimas = QLabel(f" Información de {cadenaLimpia} ")
         textoclimas.setFont(QFont('Times', 20))
         textoclimas.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        textoclimas.setStyleSheet("background-color: #ECF0F1; padding: 5px; border-radius: 5px;")
-        
-       # ventanadeciudad.addWidget(textoclimas, 1, 0)
+        ventanadeciudad.addWidget(textoclimas, 1, 0)
         textorecomendaciones = QLabel(" Recomendaciones: ")
         textorecomendaciones.setFont(QFont('Times', 20))
         textorecomendaciones.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        textorecomendaciones.setStyleSheet("background-color: #ECF0F1; padding: 5px; border-radius: 5px;")
-        
-        ventanadeciudad.addWidget(nombreciudad, 1, 1)
-        ventanadeciudad.addWidget(textoclimas, 2, 0)
-        ventanadeciudad.addWidget(textorecomendaciones, 2, 1)
-
+        ventanadeciudad.addWidget(textorecomendaciones, 1, 1)
         listaclimas = QListWidget()
-        listaclimas.setStyleSheet("""
-        QListWidget {
-            border: 1px solid #3498DB;
-            background-color: #F7F9F9;
-            border-radius: 8px;
-            padding: 5px;
-        }
-        QListWidget::item {
-            padding: 10px;
-            color: #2C3E50;
-        }
-        QListWidget::item:selected {
-            background-color: #85C1E9;
-            color: #FFFFFF;
-        }
-    """)
         listarecomendar = QListWidget()
-        listarecomendar.setStyleSheet("""
-        QListWidget {
-            border: 1px solid #1ABC9C;
-            background-color: #F2F4F4;
-            border-radius: 8px;
-            padding: 5px;
-        }
-        QListWidget::item {
-            padding: 10px;
-            color: #2C3E50;
-        }
-        QListWidget::item:selected {
-            background-color: #48C9B0;
-            color: #FFFFFF;
-        }
-    """)
+        ventanadeciudad.addWidget(listaclimas, 2, 0)
+        ventanadeciudad.addWidget(listarecomendar, 2, 1)
 
-        ventanadeciudad.setSpacing(20)
-        ventanadeciudad.setContentsMargins(10,10,10,10)
-        
         for info in informacion_ciudad:
             listaclimas.addItem(info)
 
         for recommendation in recomendaciones_ciudad:
             listarecomendar.addItem(recommendation)
 
-        ventanadeciudad.addWidget(listaclimas, 2, 0)
-        ventanadeciudad.addWidget(listarecomendar, 2, 1)
         return ventanadeciudad
 
     def null_tipo_busqueda(self):
