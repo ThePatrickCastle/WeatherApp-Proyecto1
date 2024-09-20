@@ -70,10 +70,10 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.15)
         height_20_percent = int(screen_height * 0.15)
 
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "./ui/resources/weather_app_logo_sin_fondo.png"))
+        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/weather_app_logo_sin_fondo.png"))
         Imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
-        imagenlogo.setPixmap(imagenlogoeditable)
+        imagenlogo.setPixmap(Imagenlogoeditable)
         imagenlogo.setAlignment(Qt.AlignCenter)
 
         barrasuperior.addWidget(imagenlogo)
@@ -200,10 +200,11 @@ class MainWindow(QMainWindow):
         recomendaciones_ciudad = ciudad.get_recommendations()
 
         ventanadeciudad = QGridLayout()
-        nombreciudad = QLabel(cadenaLimpia)
+        nombreciudad = QLabel(f"Mostrando resultados para {cadenaLimpia}")
         nombreciudad.setFont(QFont('Times', 20))
         nombreciudad.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        ventanadeciudad.addWidget(nombreciudad, 0, 1)
+        ventanadeciudad.addWidget(nombreciudad, 0, 0, 1, 2, Qt.AlignCenter)
+
         textoclimas = QLabel(f" Información de {cadenaLimpia} ")
         textoclimas.setFont(QFont('Times', 20))
         textoclimas.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
