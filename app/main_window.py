@@ -38,16 +38,54 @@ class MainWindow(QMainWindow):
         self.tipodebusqueda = 0
         self.cadenabuscar = ""
         self.numerotabs = 0
+
+        self.setFixedSize(1300, 700)
+        
         self.tabPrincipal = QStackedLayout()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle("AreoNimbus!")
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #1a192f;
+            }
+            QLabel {
+                color: #2E4053;
+            }
+            QPushButton {
+                background-color: #3498DB;
+                color: white;
+                border-radius: 10px;
+                padding: 10px;
+            }
+            QPushButton:hover {
+                background-color: #2980B9;
+            }
+            QLineEdit {
+                border: 1px solid #2E4053;
+                border-radius: 5px;
+                padding: 8px;
+            }
+            QComboBox {
+                border: 1px solid #2E4053;
+                border-radius: 5px;
+                padding: 5px;
+            }
+        """)
         tabdesplegado = self.creador_tab()
         capainicial = QWidget()
         capainicial.setLayout(tabdesplegado)
         self.tabPrincipal.addWidget(capainicial)
+        
+        #tamaño
+        screen = QApplication.primaryScreen().geometry()
+        self.resize(int(screen.width() * 0.6), int(screen.height() * 0.6))
+
         capafinal = QWidget()
         capafinal.setLayout(self.tabPrincipal)
         self.setCentralWidget(capafinal)
-        self.setMinimumSize(1000, 700)
-        self.setMaximumSize(1000, 700)
+
     def creador_tab(self):
         '''
         @func creador_tab crea una nueva tab con el sub-menú ya desplegado o sin desplegar, por
