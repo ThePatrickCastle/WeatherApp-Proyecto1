@@ -95,9 +95,9 @@ class MainWindow(QMainWindow):
         tabinicial = QGridLayout()
         barrasuperior = QHBoxLayout()
         barrabuscadora = QHBoxLayout()
-        self.setWindowTitle("AeroNimbus!")
-        logo = QLabel("AeroNimbus!")
-        logo.setFont(QFont('Helvetica', 50))
+        self.setWindowTitle("WeatherFly!")
+        logo = QLabel("WeatherFly!")
+        logo.setFont(QFont('Roboto', 50))
         logo.setAlignment(Qt.AlignLeft | Qt. AlignVCenter)
         imagenlogo = QLabel(" Imagen logo")
 
