@@ -102,12 +102,18 @@ class InputCleaner():
             elif state_match[1] == best_match:
                 return state_match[0]
             else:
-                return self.buscar_ciudad_con_IATA(iata_match[0])
+                if(self.buscar_ciudad_con_IATA(iata_match[0]) != ""):
+                    return self.buscar_ciudad_con_IATA(iata_match[0])
+                else:
+                    return "No valid match found"
         elif cities_match[1] and iata_match[1] and max(cities_match[1], iata_match[1]) >= 91:
             if cities_match[1] > iata_match[1]:
                 return cities_match[1]
             else:
-                return self.buscar_ciudad_con_IATA(iata_match)
+                if(self.buscar_ciudad_con_IATA(iata_match[0]) != ""):
+                    return self.buscar_ciudad_con_IATA(iata_match[0])
+                else:
+                    return "No valid match found"
         elif cities_match[1] and state_match[1] and max(cities_match[1], state_match[1]) >= 91:
             if cities_match[1] > state_match[1]:
                 return cities_match[0]
@@ -117,13 +123,19 @@ class InputCleaner():
             if states_match[1] > iata_match[1]:
                 return states_match[0]
             else:
-                return self.buscar_ciudad_con_IATA(iata_match[0])
+                if(self.buscar_ciudad_con_IATA(iata_match[0]) != ""):
+                    return self.buscar_ciudad_con_IATA(iata_match[0])
+                else:
+                    return "No valid match found"
         elif cities_match[1] >= 91:
             return cities_match[0]
         elif state_match[1] >= 91:
             return state_match[0]
         elif iata_match[1] >= 91:
-            return self.buscar_ciudad_con_IATA(iata_match[0])
+            if(self.buscar_ciudad_con_IATA(iata_match[0]) != ""):
+                return self.buscar_ciudad_con_IATA(iata_match[0])
+            else:
+                return "No valid match found"
         else:
             return "No valid match found"
 
