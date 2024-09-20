@@ -48,28 +48,28 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("AreoNimbus!")
         self.setStyleSheet("""
             QMainWindow {
-                background-color: #1a192f;
+                background-color: #1a1e36;
             }
             QLabel {
-                color: #2E4053;
+                color: #FFFFFF;
             }
             QPushButton {
-                background-color: #3498DB;
-                color: white;
-                border-radius: 10px;
+                background-color: #2980B9;
+        color: white;
+                border-radius: 9px;
                 padding: 10px;
             }
             QPushButton:hover {
-                background-color: #2980B9;
+                background-color: #0f1326;
             }
             QLineEdit {
-                border: 1px solid #2E4053;
-                border-radius: 5px;
-                padding: 8px;
+                border: 0px solid #e9d714;
+                border-radius: 10px;
+                padding: 5px;
             }
             QComboBox {
-                border: 1px solid #2E4053;
-                border-radius: 5px;
+                border: 0px solid #e9d714;
+                border-radius: 10px;
                 padding: 5px;
             }
         """)
@@ -95,9 +95,9 @@ class MainWindow(QMainWindow):
         tabinicial = QGridLayout()
         barrasuperior = QHBoxLayout()
         barrabuscadora = QHBoxLayout()
-        self.setWindowTitle("WeatherFly!")
-        logo = QLabel("WeatherFly!")
-        logo.setFont(QFont('Roboto', 50))
+        self.setWindowTitle("AirNimbus")
+        logo = QLabel("AirNimbus")
+        logo.setFont(QFont('BebasNeue', 80))
         logo.setAlignment(Qt.AlignLeft | Qt. AlignVCenter)
         imagenlogo = QLabel(" Imagen logo")
 
@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.15)
         height_20_percent = int(screen_height * 0.15)
 
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/weather_app_logo_sin_fondo.png"))
+        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/airnimbus_simple.png"))
         imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(imagenlogoeditable)
@@ -131,6 +131,7 @@ class MainWindow(QMainWindow):
         botonbuscar.pressed.connect(self.realizar_busqueda)
         barrabuscadora.addWidget(botonbuscar)
         return tabinicial
+
     def cambiar_tipo_busqueda(self, indice):
         '''
         @func cambiar_tipo_busqueda hace que al seleccionar uno de los dos tipos de busqueda desde la QComboBox listadebusqueda
