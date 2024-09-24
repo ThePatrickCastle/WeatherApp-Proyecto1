@@ -45,18 +45,18 @@ class MainWindow(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("AreoNimbus!")
+        self.setWindowTitle("AeroNimbus!")
         self.setStyleSheet("""
             QMainWindow {
-                background-color: #1a1e36;
+                background-color: #ffffff;
             }
             QLabel {
                 color: #FFFFFF;
             }
             QPushButton {
-                background-color: #2980B9;
+                background-color: #5319b2;
         color: white;
-                border-radius: 9px;
+                border-radius: 9.9px;
                 padding: 10px;
             }
             QPushButton:hover {
@@ -96,26 +96,22 @@ class MainWindow(QMainWindow):
         barrasuperior = QHBoxLayout()
         barrabuscadora = QHBoxLayout()
         self.setWindowTitle("AirNimbus")
-        logo = QLabel("AirNimbus")
-        logo.setFont(QFont('BebasNeue', 80))
-        logo.setAlignment(Qt.AlignLeft | Qt. AlignVCenter)
         imagenlogo = QLabel(" Imagen logo")
 
         screen = QApplication.primaryScreen().geometry()
         screen_width = screen.width()
         screen_height = screen.height()
 
-        width_20_percent = int(screen_width * 0.15)
-        height_20_percent = int(screen_height * 0.15)
+        width_20_percent = int(screen_width * 0.6)
+        height_20_percent = int(screen_height * 0.6)
 
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/airnimbus_simple.png"))
+        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/airnimbus_simple.jpg"))
         imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(imagenlogoeditable)
         imagenlogo.setAlignment(Qt.AlignCenter)
 
         barrasuperior.addWidget(imagenlogo)
-        barrasuperior.addWidget(logo)
         tabinicial.addLayout(barrasuperior, 0, 0)
         tabinicial.addLayout(barrabuscadora, 1, 0)
         self.barraescritura = QLineEdit()

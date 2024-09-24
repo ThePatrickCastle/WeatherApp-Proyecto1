@@ -2,3 +2,5 @@ ciudad,country,name,lat,lon,weather_main,temp,feels_like,humidity,wind_speed
 Monterrey,MX,Monterrey,25.6667,-100.3167,Clouds,300.12,302.92,81,2.97
 Monterey,US,Monterey,36.2505,-121.2516,Clear,290.88,289.83,43,5.96
 Jalisco,CO,Jalisco,3.2541,-76.5435,Clouds,297.59,298.05,75,1.79
+Nuevo Leon,MX,Nuevo León,25.6667,-100,Clouds,303.08,303.8,48,2.92
+Guanajuato,MX,Guanajuato City,21.0186,-101.2591,Clear,291.59,291.66,83,6.81
