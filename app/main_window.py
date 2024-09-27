@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("AeroNimbus!")
         self.setStyleSheet("""
             QMainWindow {
-                background-color: #ffffff;
+                background-color: #FFFFFF;
             }
             QLabel {
                 color: #FFFFFF;
@@ -105,7 +105,11 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.6)
         height_20_percent = int(screen_height * 0.6)
 
+<<<<<<< HEAD
         imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/airnimbus_simple.jpg"))
+=======
+        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/aero_nimbus_simple_logo.png"))
+>>>>>>> afd3f16
         imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(imagenlogoeditable)
@@ -235,37 +239,37 @@ class MainWindow(QMainWindow):
         recomendaciones_ciudad = ciudad.get_recommendations()
 
         ventanadeciudad = QGridLayout()
-        nombreciudad = QLabel(cadenaLimpia)
-        nombreciudad.setFont(QFont('Times', 20, QFont.Bold))
-        nombreciudad.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        nombreciudad.setStyleSheet("color: #2E4053; padding: 10px;")
-        
+
+        nombreciudad = QLabel(f"Clima para: {cadenaLimpia}")
+        nombreciudad.setFont(QFont('Times', 24, QFont.Bold))
+        nombreciudad.setAlignment(Qt.AlignCenter)
+        nombreciudad.setStyleSheet("color: #1F618D; padding: 15px; background-color: #D6EAF8; border-radius: 10px;")
+
+        ventanadeciudad.addWidget(nombreciudad, 0, 0, 1, 2)
         #ventanadeciudad.addWidget(nombreciudad, 0, 1)
         textoclimas = QLabel(f" Información de {cadenaLimpia} ")
         textoclimas.setFont(QFont('Times', 20))
         textoclimas.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        textoclimas.setStyleSheet("background-color: #ECF0F1; padding: 5px; border-radius: 5px;")
-        
+        textoclimas.setStyleSheet("background-color: #ECF0F1; padding: 10px; border-radius: 10px; margin-top: 15px;")
+
+        ventanadeciudad.addWidget(textoclimas, 1, 0)
        # ventanadeciudad.addWidget(textoclimas, 1, 0)
         textorecomendaciones = QLabel(" Recomendaciones: ")
         textorecomendaciones.setFont(QFont('Times', 20))
         textorecomendaciones.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        textorecomendaciones.setStyleSheet("background-color: #ECF0F1; padding: 5px; border-radius: 5px;")
+        textorecomendaciones.setStyleSheet("background-color: #ECF0F1; padding: 10px; border-radius: 10px; margin-top: 15px;")
         
-        ventanadeciudad.addWidget(nombreciudad, 1, 1)
-        ventanadeciudad.addWidget(textoclimas, 2, 0)
-        ventanadeciudad.addWidget(textorecomendaciones, 2, 1)
-
+        ventanadeciudad.addWidget(textorecomendaciones, 1, 1)
         listaclimas = QListWidget()
         listaclimas.setStyleSheet("""
         QListWidget {
-            border: 1px solid #3498DB;
+            border: 1px solid #000000;
             background-color: #F7F9F9;
-            border-radius: 8px;
+            border-radius: 15px;
             padding: 5px;
         }
         QListWidget::item {
-            padding: 10px;
+            padding: 8px;
             color: #2C3E50;
         }
         QListWidget::item:selected {
@@ -273,16 +277,17 @@ class MainWindow(QMainWindow):
             color: #FFFFFF;
         }
     """)
+
         listarecomendar = QListWidget()
         listarecomendar.setStyleSheet("""
         QListWidget {
-            border: 1px solid #1ABC9C;
+            border: 1px solid #000000;
             background-color: #F2F4F4;
-            border-radius: 8px;
+            border-radius: 15px;
             padding: 5px;
         }
         QListWidget::item {
-            padding: 10px;
+            padding: 8px;
             color: #2C3E50;
         }
         QListWidget::item:selected {
@@ -290,9 +295,6 @@ class MainWindow(QMainWindow):
             color: #FFFFFF;
         }
     """)
-
-        ventanadeciudad.setSpacing(20)
-        ventanadeciudad.setContentsMargins(10,10,10,10)
         
         for info in informacion_ciudad:
             listaclimas.addItem(info)
@@ -302,6 +304,9 @@ class MainWindow(QMainWindow):
 
         ventanadeciudad.addWidget(listaclimas, 2, 0)
         ventanadeciudad.addWidget(listarecomendar, 2, 1)
+
+        ventanadeciudad.setSpacing(20)
+        ventanadeciudad.setContentsMargins(20,20,20,20)
         return ventanadeciudad
 
     def null_tipo_busqueda(self):
