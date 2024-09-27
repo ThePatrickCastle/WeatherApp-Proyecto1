@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("AreoNimbus!")
         self.setStyleSheet("""
             QMainWindow {
-                background-color: #1a192f;
+                background-color: #FFFFFF;
             }
             QLabel {
                 color: #2E4053;
