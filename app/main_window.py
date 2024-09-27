@@ -104,12 +104,8 @@ class MainWindow(QMainWindow):
 
         width_20_percent = int(screen_width * 0.6)
         height_20_percent = int(screen_height * 0.6)
-
-<<<<<<< HEAD
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/airnimbus_simple.jpg"))
-=======
         imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/aero_nimbus_simple_logo.png"))
->>>>>>> afd3f16
+
         imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(imagenlogoeditable)
