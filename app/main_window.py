@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.15)
         height_20_percent = int(screen_height * 0.15)
 
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/weather_app_logo_sin_fondo.png"))
+        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/aero_nimbus_simple_logo.png"))
         imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(imagenlogoeditable)
@@ -262,13 +262,13 @@ class MainWindow(QMainWindow):
         listaclimas = QListWidget()
         listaclimas.setStyleSheet("""
         QListWidget {
-            border: 1px solid #3498DB;
+            border: 1px solid #000000;
             background-color: #F7F9F9;
-            border-radius: 8px;
-            padding: 5px;
+            border-radius: 15px;
+            padding: 2px;
         }
         QListWidget::item {
-            padding: 10px;
+            padding: 4px;
             color: #2C3E50;
         }
         QListWidget::item:selected {
@@ -279,13 +279,13 @@ class MainWindow(QMainWindow):
         listarecomendar = QListWidget()
         listarecomendar.setStyleSheet("""
         QListWidget {
-            border: 1px solid #1ABC9C;
+            border: 1px solid #000000;
             background-color: #F2F4F4;
-            border-radius: 8px;
-            padding: 5px;
+            border-radius: 15px;
+            padding: 0px;
         }
         QListWidget::item {
-            padding: 10px;
+            padding: 4px;
             color: #2C3E50;
         }
         QListWidget::item:selected {
@@ -294,8 +294,8 @@ class MainWindow(QMainWindow):
         }
     """)
 
-        ventanadeciudad.setSpacing(20)
-        ventanadeciudad.setContentsMargins(10,10,10,10)
+        ventanadeciudad.setSpacing(10)
+        ventanadeciudad.setContentsMargins(5,5,5,5)
         
         for info in informacion_ciudad:
             listaclimas.addItem(info)
