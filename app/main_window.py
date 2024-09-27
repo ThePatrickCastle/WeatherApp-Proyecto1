@@ -257,7 +257,7 @@ class MainWindow(QMainWindow):
         
         ventanadeciudad.addWidget(nombreciudad, 1, 1)
         ventanadeciudad.addWidget(textoclimas, 2, 0)
-        ventanadeciudad.addWidget(textorecomendaciones, 2, 1)
+        ventanadeciudad.addWidget(textorecomendaciones, 3, 1)
 
         listaclimas = QListWidget()
         listaclimas.setStyleSheet("""
