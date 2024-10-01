@@ -3,7 +3,7 @@ Modulo Interacción entre el usuario y la aplicación, así como las acciones qu
 Author: @Edgar Salgado González
 Contributor: @ThePatrickCastle
 Contributor: @C4mdax
-Version 1.1.0
+Version 1.1.1
 
 '''
 
@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(capafinal)
         self.setMinimumSize(1000, 700)
         self.setMaximumSize(1000, 700)
+
     def creador_tab(self):
         '''
         @func creador_tab crea una nueva tab con el sub-menú ya desplegado o sin desplegar, por
@@ -81,38 +82,68 @@ class MainWindow(QMainWindow):
         tabinicial.addLayout(barrasuperior, 0, 0)
         tabinicial.addLayout(barrabuscadora, 1, 0)
         self.barraescritura = QLineEdit()
+        self.barraescritura.setMaxLength(40)
         self.barraescritura.setPlaceholderText(" Por favor, elige una opción ")
         barrabuscadora.addWidget(self.barraescritura)
+
+        self.barraescritura.setPlaceholderText(" Escribe tu ciudad ")
+        reader = InputCleaner(self.cadenabuscar)
+        results = reader.get_results()
+        completarbusqueda = QCompleter(results)
+        completarbusqueda.setMaxVisibleItems(4)
+
+
+        # Implementación erronea del completer, no funciona en un click
+        completarbusqueda.activated.connect(self.rellenar_texto)
+
+        self.barraescritura.setCompleter(completarbusqueda)        
+        
         self.barraescritura.textEdited.connect(self.guardar_busqueda)
+
+        print(self.cadenabuscar)
+
+
+
         self.barraescritura.returnPressed.connect(self.realizar_busqueda)
         self.listadebusqueda = QComboBox()
-        self.listadebusqueda.addItems(["Opciones", "Vuelo", "Ciudad"])
+        self.listadebusqueda.addItems(["Ciudad", "Vuelo"])
         self.listadebusqueda.currentIndexChanged.connect(self.cambiar_tipo_busqueda)
         barrabuscadora.addWidget(self.listadebusqueda)
         botonbuscar = QPushButton("Buscar")
         botonbuscar.pressed.connect(self.realizar_busqueda)
         barrabuscadora.addWidget(botonbuscar)
         return tabinicial
+
+
+    #Esta función no sirve
+    def rellenar_texto(self, completado):
+        '''
+        Funcion rellenar_texto Modifica QLineEdit con la seleccion del QCompleter
+        
+        '''
+        self.barraescritura.setText(completado)
+        self.cadenabuscar = completado
+
+
+    # Esta función tambien tiene el completer mal
     def cambiar_tipo_busqueda(self, indice):
         '''
         @func cambiar_tipo_busqueda hace que al seleccionar uno de los dos tipos de busqueda desde la QComboBox listadebusqueda
         determinemos que tipo de busqueda se realizará
         @param self, indice. self siendo la ventana principal en sí. indice siendo el índice de la QComboBox elegida
         '''
-        if indice == 2:
-            self.tipodebusqueda = 2
+        if indice == 0:
+            self.tipodebusqueda = 0
             self.barraescritura.setPlaceholderText(" Escribe tu ciudad ")
-            ciudades = ["Valencia", "Madrid", "Tokyo", "Monterrey"]
-            completarbusqueda = QCompleter(ciudades)
+            reader = InputCleaner(self.cadenabuscar)
+            results = reader.get_results()
+            completarbusqueda = QCompleter(results)
+            completarbusqueda.setMaxVisibleItems(4)
             self.barraescritura.setCompleter(completarbusqueda)
+
         if indice == 1:
             self.tipodebusqueda = 1
-            vuelos = ["00000", "11111", "22222", "33333"]
-            completarbusqueda = QCompleter(vuelos)
             self.barraescritura.setPlaceholderText(" Escribe tu ticket ")
-            self.barraescritura.setCompleter(completarbusqueda)
-        if indice == 0:
-            self.barraescritura.setPlaceholderText(" Por favor, elige una opción")
 
 
     def guardar_busqueda(self, cadenarecibida):
@@ -132,10 +163,9 @@ class MainWindow(QMainWindow):
         destino = Recommendations(estado_destino)
 
         informacion_origen = origen.get_atributes()
-
         informacion_destino = destino.get_atributes()
+        
         recomendaciones_destino = destino.get_recommendations()
-
 
         ventanadevuelo = QGridLayout()
         ticketvuelo = QLabel(f"Ticket {self.cadenabuscar}")
@@ -196,15 +226,16 @@ class MainWindow(QMainWindow):
         para la ventana de la ciudad
         '''
         ciudad = Recommendations(cadenaLimpia)
+
         informacion_ciudad = ciudad.get_atributes()
         recomendaciones_ciudad = ciudad.get_recommendations()
+
 
         ventanadeciudad = QGridLayout()
         nombreciudad = QLabel(f"Mostrando resultados para {cadenaLimpia}")
         nombreciudad.setFont(QFont('Times', 20))
         nombreciudad.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        ventanadeciudad.addWidget(nombreciudad, 0, 0, 1, 2, Qt.AlignCenter)
-
+        ventanadeciudad.addWidget(nombreciudad, 0, 0, 1, 2, Qt.AlignCenter)       
         textoclimas = QLabel(f" Información de {cadenaLimpia} ")
         textoclimas.setFont(QFont('Times', 20))
         textoclimas.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
@@ -217,20 +248,14 @@ class MainWindow(QMainWindow):
         listarecomendar = QListWidget()
         ventanadeciudad.addWidget(listaclimas, 2, 0)
         ventanadeciudad.addWidget(listarecomendar, 2, 1)
-
+        
         for info in informacion_ciudad:
             listaclimas.addItem(info)
-
+                
         for recommendation in recomendaciones_ciudad:
             listarecomendar.addItem(recommendation)
 
         return ventanadeciudad
-
-    def null_tipo_busqueda(self):
-        '''
-        @function null_tipo_busqueda lanza un pop up al usuario que le advierte que su elección es vacia
-        '''
-        mensajeerror = QMessageBox.critical(self,"Selección nula", " Por favor, elige una opción ", buttons = QMessageBox.Ok)
 
 
     def null_cadenabuscar(self):
@@ -245,6 +270,12 @@ class MainWindow(QMainWindow):
         '''
         mensajeerror = QMessageBox.critical(self, "Not Found",  "La cadena no ha sido encontrada, intente nuevamente", buttons = QMessageBox.Ok)
 
+    def request_fallida(self):
+        '''
+        @function request_fallida lanza un pop_up que advierte al usuario que revise su conexión a internet
+        '''
+        mensajeerror = QMessageBox.critical(self, "None Request",  "Verifique su conexión a internet", buttons = QMessageBox.Ok)
+
 
     def realizar_busqueda(self):
         '''
@@ -254,10 +285,6 @@ class MainWindow(QMainWindow):
         o ciudad
         '''
         tabnueva = self.creador_tab()
-        if self.tipodebusqueda == 0:
-            self.null_tipo_busqueda()
-            return
-
         if self.cadenabuscar == "":
             self.null_cadenabuscar()
             return
@@ -277,7 +304,7 @@ class MainWindow(QMainWindow):
                 tabnueva.addLayout(self.ventana_vuelo(codigos_iata[0], estado_origen, codigos_iata[1], estado_destino), 2, 0)
 
 
-        elif self.tipodebusqueda == 2:
+        elif self.tipodebusqueda == 0:
             reader = InputCleaner(self.cadenabuscar)
             cadenaLimpia = reader.encontrar_mejor_apareamiento()
 

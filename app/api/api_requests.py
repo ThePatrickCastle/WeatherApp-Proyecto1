@@ -1,7 +1,7 @@
 """
 Modulo de Requests
 Autor: @ThePatrickCastle
-Version 1.0.1
+Version 1.0.2
 
 """
 
@@ -37,8 +37,12 @@ class APIRequest():
             try:
                 jsonData = requests.get(
                     f"https://api.openweathermap.org/data/2.5/weather?lat={latitud}&lon={longitud}&appid={llave}")
-            except:
+            except requests.ConnectionError as e:
+                print(f"Connection error: {e}")
+                return None
+            except Exception as e:
                 print(f"Request Failed. Status Code: {jsonData.status_code}")
+                return None
             
             if not jsonData.ok:
                 print(f"Request Failed. Status Code: {jsonData.status_code}")
@@ -48,8 +52,12 @@ class APIRequest():
             try:
                 jsonData = requests.get(
                     f"https://api.openweathermap.org/data/2.5/weather?q={ciudad}&appid={llave}")
-            except:
+            except requests.ConnectionError as e:
+                print(f"Connection error: {e}")
+                return None
+            except Exception as e:
                 print(f"Request Failed. Status Code: {jsonData.status_code}")
+                return None
             
             if not jsonData.ok:
                 print(f"Request Failed. Status Code: {jsonData.status_code}")
@@ -74,7 +82,10 @@ class APIRequest():
         
         """
         jsonData = APIRequest.request_JSON(llave, latitud, longitud, ciudad)
-        
+
+        if jsonData is None:
+            return None 
+
         climaCiudad = {
             "ciudad": ciudad,
             "country": jsonData["sys"]["country"],

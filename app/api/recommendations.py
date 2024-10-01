@@ -1,7 +1,7 @@
 """
 Modulo de Recomendaciones
 Author: @ThePatrickCastle
-Version 1.0.1
+Version 1.0.2
 
 """
 import csv
@@ -23,6 +23,8 @@ class Recommendations():
     * get_number_atribute_Recommendation(file_name, atributeNo)
     * get_string_atribute_Recommentation(file_name, atributeNo)
     * get_recommendations()
+    * limpiar_base_de_datos()
+    * get_possible_cities()
     
     Atributos
     ---------
@@ -65,21 +67,23 @@ class Recommendations():
         if self.noArgumentos == 1:
             if cityFinder.buscar_Ciudad(self.nombre_Ciudad):
                localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
-               self.atributes = cityFinder.get_Parametros(localizacion)
+               self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
             else:
                nuevoJSON = APIRequest.get_formated_JSON(self.llave, 0, 0, self.nombre_Ciudad)
-               JSONtoCSV.append_JSON(nuevoJSON)
-               localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
-               self.atributes = cityFinder.get_Parametros(localizacion)
+               if nuevoJSON is not None:
+                   JSONtoCSV.append_JSON(nuevoJSON)
+                   localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
+                   self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
         else:
             if cityFinder.buscar_Coordenadas(self.latitud, self.longitud):
                 localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
-                self.atributes = cityFinder.get_Parametros(localizacion)
+                self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
             else:
                 nuevoJSON = APIRequest.get_formated_JSON(self.llave, self.latitud, self.longitud, "")
-                JSONtoCSV.append_JSON(nuevoJSON)
-                localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
-                self.atributes = cityFinder.get_Parametros(localizacion)
+                if nuevoJSON is not None:
+                    JSONtoCSV.append_JSON(nuevoJSON)
+                    localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
+                    self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
 
     
     def get_atributes(self):
@@ -178,6 +182,10 @@ class Recommendations():
 
     def limpiar_base_de_datos():
         cityFinder.formatear_CSV()
+
+    def get_possible_cities():
+        pass
+        
         
 
 

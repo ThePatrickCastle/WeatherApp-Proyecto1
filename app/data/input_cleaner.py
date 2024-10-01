@@ -17,6 +17,7 @@ class InputCleaner():
     -------
     * __init__(entradaUsuario)
     * get_lists(archivo_csv, nombre_columna)
+    * get_results()
     * set_entrada_usuario(entradaNueva)
     * buscar_ciudad_con_IATA(iata)
     * encontrar_mejor_apareamiento()
@@ -56,6 +57,16 @@ class InputCleaner():
             for row in reader:
                 elementos.append(row[nombre_columna])
         return elementos
+
+    def get_results(self):
+        """
+        Método para regresar la lista de ciudades comparables para autocompletar la entrada de usuario
+
+        Returns:
+        * self.cities (list): Regresa la lista de ciudades con las que se compara la cadena usuario
+
+        """
+        return self.cities + self.states + self.iataCodes
 
     def set_entrada_usuario(self, nuevaEntrada):
         self.entradaUsuario = nuevaEntrada

@@ -1,7 +1,7 @@
 """
 Modulo para buscar Ciudades en la base de datos.
 Author: @ThePatrickCastle
-Version 1.0.1
+Version 1.0.2
 
 """
 import os
@@ -17,7 +17,7 @@ class CityDataBaseFinder:
     * get_Indice_Ciudad(ciudad)
     * buscar_Coordenadas(latitud, longitud)
     * get_Indice_Coordenadas(latitud, longitud)
-    * get_Parametro(row_index)
+    * get_Parametro(row_index, file_path)
     * formatear_CSV()
     
     '''
@@ -125,29 +125,30 @@ class CityDataBaseFinder:
             return -1
    
     @staticmethod
-    def get_Parametros(row_index):
+    def get_Parametros(path_file, row_index):
         """
         Método que, dado el indice, regresa una lista con todos los parametros de una ciudad.
         
         Args:
-        row_index
+        path_file (str): Archivo en el que se buscará el archivo
+        row_index (int): Indice donde se buscará
         
         Returns:
         rows[row_index] (lista): Lista de los elementos en un indice
         
         """
-        archivo_existente = os.path.isfile("./api/Clima.csv")
+        archivo_existente = os.path.isfile(path_file)
         if not archivo_existente:
             return False
         else:
-            with open("./api/Clima.csv", mode='r') as file:
+            with open(path_file, mode='r') as file:
                 reader = csv.reader(file)
                 rows = list(reader)
                 if 0 <= row_index < len(rows):
                     return rows[row_index]
                 else:
                     return []
-        
+                        
     @staticmethod
     def formatear_CSV():
         """
