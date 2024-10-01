@@ -272,7 +272,6 @@ class MainWindow(QMainWindow):
         '''
 
         temp = self.barraescritura.text()
-        print(self.tipodebusqueda)
         
         tabnueva = self.creador_tab()
 
