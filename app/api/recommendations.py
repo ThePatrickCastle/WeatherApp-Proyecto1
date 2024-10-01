@@ -46,6 +46,7 @@ class Recommendations():
         """
         self.noArgumentos = len(args)
         self.llave = "310e40947f292086c33d04e2f959e7f8"
+        self.header_atributes = []
         self.atributes = []
         self.recomendaciones = []
 
@@ -67,22 +68,26 @@ class Recommendations():
         if self.noArgumentos == 1:
             if cityFinder.buscar_Ciudad(self.nombre_Ciudad):
                localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
+               self.header_atributes = cityFinder.get_Parametros("./api/Clima.csv", 0)
                self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
             else:
                nuevoJSON = APIRequest.get_formated_JSON(self.llave, 0, 0, self.nombre_Ciudad)
                if nuevoJSON is not None:
                    JSONtoCSV.append_JSON(nuevoJSON)
                    localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
+                   self.header_atributes = cityFinder.get_Parametros("./api/Clima.csv", 0)
                    self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
         else:
             if cityFinder.buscar_Coordenadas(self.latitud, self.longitud):
                 localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
+                self.header_atributes = cityFinder.get_Parametros("./api/Clima.csv", 0)
                 self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
             else:
                 nuevoJSON = APIRequest.get_formated_JSON(self.llave, self.latitud, self.longitud, "")
                 if nuevoJSON is not None:
                     JSONtoCSV.append_JSON(nuevoJSON)
                     localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
+                    self.header_atributes = cityFinder.get_Parametros("./api/Clima.csv", 0)
                     self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
 
     
@@ -94,7 +99,13 @@ class Recommendations():
         recomendaciones (list): Lista que contiene todos los elementos de la fila de un registro en Clima.csv
         
         """
-        return self.atributes
+        formato_amigable = []
+
+        if len(self.header_atributes) == len(self.atributes):
+            for i in range(len(self.header_atributes)):
+                formato_amigable.append(self.header_atributes[i].title() + ": " + self.atributes[i]) 
+        
+        return formato_amigable
 
       
     def get_number_atribute_Recomendation(self, file_name, atributeNo):

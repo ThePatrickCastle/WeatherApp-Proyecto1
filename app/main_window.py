@@ -35,6 +35,7 @@ class MainWindow(QMainWindow):
     '''
     def __init__(self):
         super().__init__()
+        self.hayconexion = True
         self.tipodebusqueda = 0
         self.cadenabuscar = ""
         self.numerotabs = 0
@@ -92,19 +93,11 @@ class MainWindow(QMainWindow):
         completarbusqueda = QCompleter(results)
         completarbusqueda.setMaxVisibleItems(4)
 
+        completarbusqueda.activated.connect(self.realizar_busqueda)
 
-        # Implementación erronea del completer, no funciona en un click
-        completarbusqueda.activated.connect(self.rellenar_texto)
-
-        self.barraescritura.setCompleter(completarbusqueda)        
-        
+        self.barraescritura.setCompleter(completarbusqueda)               
         self.barraescritura.textEdited.connect(self.guardar_busqueda)
 
-        print(self.cadenabuscar)
-
-
-
-        self.barraescritura.returnPressed.connect(self.realizar_busqueda)
         self.listadebusqueda = QComboBox()
         self.listadebusqueda.addItems(["Ciudad", "Vuelo"])
         self.listadebusqueda.currentIndexChanged.connect(self.cambiar_tipo_busqueda)
@@ -114,18 +107,6 @@ class MainWindow(QMainWindow):
         barrabuscadora.addWidget(botonbuscar)
         return tabinicial
 
-
-    #Esta función no sirve
-    def rellenar_texto(self, completado):
-        '''
-        Funcion rellenar_texto Modifica QLineEdit con la seleccion del QCompleter
-        
-        '''
-        self.barraescritura.setText(completado)
-        self.cadenabuscar = completado
-
-
-    # Esta función tambien tiene el completer mal
     def cambiar_tipo_busqueda(self, indice):
         '''
         @func cambiar_tipo_busqueda hace que al seleccionar uno de los dos tipos de busqueda desde la QComboBox listadebusqueda
@@ -139,6 +120,7 @@ class MainWindow(QMainWindow):
             results = reader.get_results()
             completarbusqueda = QCompleter(results)
             completarbusqueda.setMaxVisibleItems(4)
+            completarbusqueda.activated.connect(self.realizar_busqueda)
             self.barraescritura.setCompleter(completarbusqueda)
 
         if indice == 1:
@@ -164,8 +146,13 @@ class MainWindow(QMainWindow):
 
         informacion_origen = origen.get_atributes()
         informacion_destino = destino.get_atributes()
-        
-        recomendaciones_destino = destino.get_recommendations()
+
+        recomendaciones_destino = []
+
+        if len(informacion_origen) != 0 and len(informacion_destino) != 0:
+            recomendaciones_destino = destino.get_recommendations()
+        else:
+            self.hayconexion = False
 
         ventanadevuelo = QGridLayout()
         ticketvuelo = QLabel(f"Ticket {self.cadenabuscar}")
@@ -228,8 +215,12 @@ class MainWindow(QMainWindow):
         ciudad = Recommendations(cadenaLimpia)
 
         informacion_ciudad = ciudad.get_atributes()
-        recomendaciones_ciudad = ciudad.get_recommendations()
+        recomendaciones_ciudad = []
 
+        if len(informacion_ciudad) != 0:
+            recomendaciones_ciudad = ciudad.get_recommendations()
+        else:
+            self.hayconexion = False
 
         ventanadeciudad = QGridLayout()
         nombreciudad = QLabel(f"Mostrando resultados para {cadenaLimpia}")
@@ -284,7 +275,10 @@ class MainWindow(QMainWindow):
         no sea vacia y que no sea igual a Cadenanoencontrada, después de eso despliega una ventana provisional de vuelo
         o ciudad
         '''
+        self.cadenabuscar = self.barraescritura.text()
+        
         tabnueva = self.creador_tab()
+
         if self.cadenabuscar == "":
             self.null_cadenabuscar()
             return
@@ -318,6 +312,10 @@ class MainWindow(QMainWindow):
         self.tabPrincipal.addWidget(capanueva)
         self.numerotabs += 1
         self.tabPrincipal.setCurrentIndex(self.numerotabs)
+        
+        if not self.hayconexion:
+            self.request_fallida()
+
 
 def borrar_datos():
     Recommendations.limpiar_base_de_datos()
