@@ -46,6 +46,7 @@ class APIRequest():
             
             if not jsonData.ok:
                 print(f"Request Failed. Status Code: {jsonData.status_code}")
+                return None
             
             return jsonData.json()
         else:
@@ -61,6 +62,7 @@ class APIRequest():
             
             if not jsonData.ok:
                 print(f"Request Failed. Status Code: {jsonData.status_code}")
+                return None
             
             return jsonData.json()
             

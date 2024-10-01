@@ -116,12 +116,6 @@ class MainWindow(QMainWindow):
         if indice == 0:
             self.tipodebusqueda = 0
             self.barraescritura.setPlaceholderText(" Escribe tu ciudad ")
-            reader = InputCleaner(self.cadenabuscar)
-            results = reader.get_results()
-            completarbusqueda = QCompleter(results)
-            completarbusqueda.setMaxVisibleItems(4)
-            completarbusqueda.activated.connect(self.realizar_busqueda)
-            self.barraescritura.setCompleter(completarbusqueda)
 
         if indice == 1:
             self.tipodebusqueda = 1
@@ -265,7 +259,7 @@ class MainWindow(QMainWindow):
         '''
         @function request_fallida lanza un pop_up que advierte al usuario que revise su conexión a internet
         '''
-        mensajeerror = QMessageBox.critical(self, "None Request",  "Verifique su conexión a internet", buttons = QMessageBox.Ok)
+        mensajeerror = QMessageBox.critical(self, "None Request",  "Request a servidor fallida, verifique su conexión a internet. Si no funciona, eliga otra ciudad", buttons = QMessageBox.Ok)
 
 
     def realizar_busqueda(self):
@@ -274,8 +268,11 @@ class MainWindow(QMainWindow):
         se ejecuta la busqueda, que por el momento solo checa que se haya seleccionado una opción, que la cadena
         no sea vacia y que no sea igual a Cadenanoencontrada, después de eso despliega una ventana provisional de vuelo
         o ciudad
+
         '''
-        self.cadenabuscar = self.barraescritura.text()
+
+        temp = self.barraescritura.text()
+        print(self.tipodebusqueda)
         
         tabnueva = self.creador_tab()
 
@@ -296,9 +293,10 @@ class MainWindow(QMainWindow):
                 estado_destino = reader_destino.encontrar_mejor_apareamiento()
 
                 tabnueva.addLayout(self.ventana_vuelo(codigos_iata[0], estado_origen, codigos_iata[1], estado_destino), 2, 0)
-
+            
 
         elif self.tipodebusqueda == 0:
+            self.cadenabuscar = temp
             reader = InputCleaner(self.cadenabuscar)
             cadenaLimpia = reader.encontrar_mejor_apareamiento()
 
@@ -307,14 +305,22 @@ class MainWindow(QMainWindow):
                 return
             else:
                 tabnueva.addLayout(self.ventana_ciudad(cadenaLimpia), 2, 0)
+
+
         capanueva = QWidget()
         capanueva.setLayout(tabnueva)
         self.tabPrincipal.addWidget(capanueva)
         self.numerotabs += 1
         self.tabPrincipal.setCurrentIndex(self.numerotabs)
-        
+
+        self.listadebusqueda.setCurrentIndex(0)
+        self.tipodebusqueda = 0
+
         if not self.hayconexion:
             self.request_fallida()
+            self.hayconexion = True
+            return
+
 
 
 def borrar_datos():
