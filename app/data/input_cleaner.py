@@ -38,7 +38,7 @@ class InputCleaner():
 
         """
         self.entradaUsuario = entradaUsuario
-        self.states = self.get_lists("IP2LOCATION-ISO3166-2.CSV", "subdivision_name")
+        self.states = self.get_lists("IP2LOCATION-ISO3166-2.csv", "subdivision_name")
         self.cities = self.get_lists("world-cities.csv", "name")
         self.iataCodes = self.get_lists("airports.csv", "code")
         self.cities_no_accents_array = self.quitar_acentos_de_array(self.cities)
