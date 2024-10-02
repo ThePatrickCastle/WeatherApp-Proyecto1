@@ -292,7 +292,7 @@ class MainWindow(QMainWindow):
 
         if self.tipodebusqueda == 1:
             
-            csv_path = os.path.join(base_dir, 'data', 'finder', 'vuelos.csv')
+            csv_path = os.path.join(basedir, 'data', 'finder', 'vuelos.csv')
 
             finder = TicketFinder(self.resource_path(csv_path))
             codigos_iata = finder.read_ticket(self.cadenabuscar)
