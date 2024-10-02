@@ -33,11 +33,15 @@ class CityDataBaseFinder:
         (bool): Falso si no está en el Clima.csv y verdadero si está en el Clima.csv
         
         """
-        archivo_existente = os.path.isfile("./Clima.csv")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
+        archivo_existente = os.path.isfile(file_path)
+
         if not archivo_existente:
             return False
         else:
-            with open("./api/Clima.csv", 'r', newline='') as csv_file:
+            with open(file_path, 'r', newline='') as csv_file:
                 reader = csv.DictReader(csv_file)
                 for row in reader:
                     if row["ciudad"] == ciudad or row["name"] == ciudad:
@@ -56,11 +60,14 @@ class CityDataBaseFinder:
         row_index (int): Regresa el indice de la ciudad o -1 si no la encuentra
         
         """
-        archivo_existente = os.path.isfile("./api/Clima.csv")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
+        archivo_existente = os.path.isfile(file_path)
         if not archivo_existente:
             return -1
         else:
-            with open("./api/Clima.csv", 'r', newline='') as csv_file:
+            with open(file_path, 'r', newline='') as csv_file:
                 reader = csv.DictReader(csv_file)
                 for row_index, row in enumerate(reader):
                     row_index += 1
@@ -81,11 +88,14 @@ class CityDataBaseFinder:
         (bool): Falso si no está en el Clima.csv y verdadero si está en el Clima.csv
         
         """
-        archivo_existente = os.path.isfile("./api/Clima.csv")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
+        archivo_existente = os.path.isfile(file_path)
         if not archivo_existente:
             return False
         else:
-            with open("./api/Clima.csv", mode='r') as csv_file:
+            with open(file_path, mode='r') as csv_file:
                 reader = csv.DictReader(csv_file)               
                 found = False
                 for row in reader:
@@ -109,11 +119,14 @@ class CityDataBaseFinder:
         row_index (int): Regresa el indice de la longitud donde esté la latitud y longitud correspondiente o -1 si no los encuentra
         
         """
-        archivo_existente = os.path.isfile("./api/Clima.csv")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
+        archivo_existente = os.path.isfile(file_path)
         if not archivo_existente:
             return -1
         else:
-            with open("./api/Clima.csv", mode='r') as csv_file:
+            with open(file_path, mode='r') as csv_file:
                 reader = csv.DictReader(csv_file)
                 for row_index, row in enumerate(reader):
                     row_index += 1
@@ -155,15 +168,18 @@ class CityDataBaseFinder:
         Método que formatea la base de datos Clima.csv menos su header
 
         """
-        archivo_existente = os.path.isfile("./api/Clima.csv")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
+        archivo_existente = os.path.isfile(file_path)
         if not archivo_existente:
             pass
         else:
-            with open("./api/Clima.csv", 'r', newline='') as csv_file:
+            with open(file_path, 'r', newline='') as csv_file:
                 reader = csv.reader(csv_file)
                 header = next(reader)
             
-                with open("./api/Clima.csv", 'w', newline='') as csv_file:
+                with open(file_path, 'w', newline='') as csv_file:
                     writer = csv.writer(csv_file)
                     writer.writerow(header)
                 

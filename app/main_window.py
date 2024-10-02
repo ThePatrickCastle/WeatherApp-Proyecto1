@@ -72,7 +72,7 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.15)
         height_20_percent = int(screen_height * 0.15)
 
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/weather_app_logo_sin_fondo.png"))
+        imagenlogoeditable = QPixmap(os.path.join(basedir, 'ui', 'resources', 'weather_app_logo_sin_fondo.png'))
         Imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(Imagenlogoeditable)

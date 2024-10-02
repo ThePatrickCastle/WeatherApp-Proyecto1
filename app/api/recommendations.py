@@ -5,6 +5,7 @@ Version 1.0.2
 
 """
 import csv
+import os
 
 from .api_requests import APIRequest
 from .json_to_csv import JSONtoCSV 
@@ -24,7 +25,6 @@ class Recommendations():
     * get_string_atribute_Recommentation(file_name, atributeNo)
     * get_recommendations()
     * limpiar_base_de_datos()
-    * get_possible_cities()
     
     Atributos
     ---------
@@ -65,30 +65,33 @@ class Recommendations():
         Método que se asegura que el objeto agregue a la base de datos Clima.csv su ciudad y recupere su informacion en formato de lista
 
         """
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
         if self.noArgumentos == 1:
             if cityFinder.buscar_Ciudad(self.nombre_Ciudad):
                localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
-               self.header_atributes = cityFinder.get_Parametros("./api/Clima.csv", 0)
-               self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
+               self.header_atributes = cityFinder.get_Parametros(file_path, 0)
+               self.atributes = cityFinder.get_Parametros(file_path, localizacion)
             else:
                nuevoJSON = APIRequest.get_formated_JSON(self.llave, 0, 0, self.nombre_Ciudad)
                if nuevoJSON is not None:
                    JSONtoCSV.append_JSON(nuevoJSON)
                    localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
-                   self.header_atributes = cityFinder.get_Parametros("./api/Clima.csv", 0)
-                   self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
+                   self.header_atributes = cityFinder.get_Parametros(file_path, 0)
+                   self.atributes = cityFinder.get_Parametros(file_path, localizacion)
         else:
             if cityFinder.buscar_Coordenadas(self.latitud, self.longitud):
                 localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
-                self.header_atributes = cityFinder.get_Parametros("./api/Clima.csv", 0)
-                self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
+                self.header_atributes = cityFinder.get_Parametros(file_path, 0)
+                self.atributes = cityFinder.get_Parametros(file_path, localizacion)
             else:
                 nuevoJSON = APIRequest.get_formated_JSON(self.llave, self.latitud, self.longitud, "")
                 if nuevoJSON is not None:
                     JSONtoCSV.append_JSON(nuevoJSON)
                     localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
-                    self.header_atributes = cityFinder.get_Parametros("./api/Clima.csv", 0)
-                    self.atributes = cityFinder.get_Parametros("./api/Clima.csv", localizacion)
+                    self.header_atributes = cityFinder.get_Parametros(file_path, 0)
+                    self.atributes = cityFinder.get_Parametros(file_path, localizacion)
 
     
     def get_atributes(self):
@@ -121,7 +124,10 @@ class Recommendations():
 
         """
         target_value = float(self.atributes[atributeNo])
-        csv_file = "./api/recomendTables/"+file_name+".csv"
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(base_dir, 'recomendTables', file_name+".csv")
+
         closest_weather = None
         closest_difference = float('inf')
         recommendation = None
@@ -152,7 +158,9 @@ class Recommendations():
 
         """
         target_value = self.atributes[atributeNo]
-        csv_file = "./api/recomendTables/"+file_name+".csv"
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(base_dir, 'recomendTables', file_name+".csv")
     
         with open(csv_file, mode='r') as csv_file:
             reader = csv.DictReader(csv_file)
@@ -194,9 +202,6 @@ class Recommendations():
     def limpiar_base_de_datos():
         cityFinder.formatear_CSV()
 
-    def get_possible_cities():
-        pass
-        
         
 
 

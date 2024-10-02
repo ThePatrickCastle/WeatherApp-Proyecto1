@@ -6,6 +6,8 @@ Version 1.1.2
 
 """
 import csv
+import os
+
 import unidecode
 
 from rapidfuzz import process
@@ -55,8 +57,12 @@ class InputCleaner():
         * elementos (list): Lista con todos los elementos en la comlumna nombre_columna del archivo_csv
         
         """
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(base_dir, 'finder', archivo_csv)
+
         elementos = []
-        with open("./data/finder/"+archivo_csv, mode='r') as file:
+
+        with open(csv_file, mode='r') as file:
             reader = csv.DictReader(file)            
             for row in reader:
                 elementos.append(row[nombre_columna])
@@ -87,7 +93,10 @@ class InputCleaner():
         * ciudad_row (str): Cadena con la ciudad del codigo iata
         
         """
-        with open("./data/finder/airports.csv", mode='r') as csv_file:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(base_dir, 'finder', 'airports.csv')
+
+        with open(csv_file, mode='r') as csv_file:
             reader = csv.DictReader(csv_file)               
             for row in reader:
                 iata_row = row['code']
