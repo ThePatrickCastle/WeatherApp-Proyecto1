@@ -50,6 +50,15 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1000, 700)
         self.setMaximumSize(1000, 700)
 
+    def resource_path(self, relative_path):
+        """
+        Funcion para obtener la direccion absoluta de las imagenes en el ejecutable
+        """
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative_path)
+        else:
+            return os.path.join(os.path.abspath("."), relative_path)
+
     def creador_tab(self):
         '''
         @func creador_tab crea una nueva tab con el sub-menú ya desplegado o sin desplegar, por
@@ -72,7 +81,9 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.15)
         height_20_percent = int(screen_height * 0.15)
 
-        imagenlogoeditable = QPixmap(os.path.join(basedir, 'ui', 'resources', 'weather_app_logo_sin_fondo.png'))
+        direccion_logo = os.path.join(basedir, 'ui', 'resources', 'weather_app_logo_sin_fondo.png')
+        
+        imagenlogoeditable = QPixmap(self.resource_path(direccion_logo))
         Imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(Imagenlogoeditable)
@@ -170,7 +181,8 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.10)
         height_20_percent = int(screen_height * 0.10)
 
-        avion_logo = QPixmap(os.path.join(basedir + "/ui/resources/Avion.png"))
+        direccion_avion = os.path.join(basedir, 'ui', 'resources', 'Avion.png')
+        avion_logo = QPixmap(self.resource_path(direccion_avion))
         avion_logo = avion_logo.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         avion.setPixmap(avion_logo)
@@ -279,7 +291,10 @@ class MainWindow(QMainWindow):
             self.null_cadenabuscar()
 
         if self.tipodebusqueda == 1:
-            finder = TicketFinder("./data/finder/vuelos.csv")
+            
+            csv_path = os.path.join(base_dir, 'data', 'finder', 'vuelos.csv')
+
+            finder = TicketFinder(self.resource_path(csv_path))
             codigos_iata = finder.read_ticket(self.cadenabuscar)
             if codigos_iata == "Ticket de vuelo no encontrado":
                 self.cadena_no_encontrada()
