@@ -1,5 +1,6 @@
 language_tool_python==2.8.1
 PyQt5==5.15.11
+pyinstaller==6.10.0
 rapidfuzz==3.9.7
 requests==2.32.3
 schedule==1.2.2
