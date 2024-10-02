@@ -272,19 +272,17 @@ class MainWindow(QMainWindow):
         '''
 
         temp = self.barraescritura.text()
-        
+
         tabnueva = self.creador_tab()
 
         if self.cadenabuscar == "":
             self.null_cadenabuscar()
-            return
 
         if self.tipodebusqueda == 1:
             finder = TicketFinder("./data/finder/vuelos.csv")
             codigos_iata = finder.read_ticket(self.cadenabuscar)
             if codigos_iata == "Ticket de vuelo no encontrado":
                 self.cadena_no_encontrada()
-                return
             else:
                 reader_origen = InputCleaner(codigos_iata[0])
                 estado_origen = reader_origen.encontrar_mejor_apareamiento()
@@ -301,7 +299,6 @@ class MainWindow(QMainWindow):
 
             if cadenaLimpia == "No valid match found":
                 self.cadena_no_encontrada()
-                return
             else:
                 tabnueva.addLayout(self.ventana_ciudad(cadenaLimpia), 2, 0)
 
