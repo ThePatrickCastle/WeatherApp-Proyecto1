@@ -62,7 +62,7 @@ class InputCleaner():
 
         elementos = []
 
-        with open(csv_file, mode='r') as file:
+        with open(csv_file, mode='r', encoding = 'utf-8') as file:
             reader = csv.DictReader(file)            
             for row in reader:
                 elementos.append(row[nombre_columna])
@@ -96,7 +96,7 @@ class InputCleaner():
         base_dir = os.path.dirname(os.path.abspath(__file__))
         csv_file = os.path.join(base_dir, 'finder', 'airports.csv')
 
-        with open(csv_file, mode='r') as csv_file:
+        with open(csv_file, mode='r', encoding = 'utf-8') as csv_file:
             reader = csv.DictReader(csv_file)               
             for row in reader:
                 iata_row = row['code']

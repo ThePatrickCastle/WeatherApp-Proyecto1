@@ -43,7 +43,7 @@ class TicketFinder:
         * iatas (list): Lista con los 2 códigos iatas a buscar
         """
         iatas = []
-        with open(self.csv_file, mode='r') as file:
+        with open(self.csv_file, mode='r', encoding = 'utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 if row['ticket_id'] == str(ticket_id):

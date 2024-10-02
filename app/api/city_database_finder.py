@@ -41,7 +41,7 @@ class CityDataBaseFinder:
         if not archivo_existente:
             return False
         else:
-            with open(file_path, 'r', newline='') as csv_file:
+            with open(file_path, 'r', newline='', encoding = 'utf-8') as csv_file:
                 reader = csv.DictReader(csv_file)
                 for row in reader:
                     if row["ciudad"] == ciudad or row["name"] == ciudad:
@@ -67,7 +67,7 @@ class CityDataBaseFinder:
         if not archivo_existente:
             return -1
         else:
-            with open(file_path, 'r', newline='') as csv_file:
+            with open(file_path, 'r', newline='', encoding = 'utf-8') as csv_file:
                 reader = csv.DictReader(csv_file)
                 for row_index, row in enumerate(reader):
                     row_index += 1
@@ -95,7 +95,7 @@ class CityDataBaseFinder:
         if not archivo_existente:
             return False
         else:
-            with open(file_path, mode='r') as csv_file:
+            with open(file_path, mode='r', encoding = 'utf-8') as csv_file:
                 reader = csv.DictReader(csv_file)               
                 found = False
                 for row in reader:
@@ -126,7 +126,7 @@ class CityDataBaseFinder:
         if not archivo_existente:
             return -1
         else:
-            with open(file_path, mode='r') as csv_file:
+            with open(file_path, mode='r', encoding = 'utf-8') as csv_file:
                 reader = csv.DictReader(csv_file)
                 for row_index, row in enumerate(reader):
                     row_index += 1
@@ -154,7 +154,7 @@ class CityDataBaseFinder:
         if not archivo_existente:
             return False
         else:
-            with open(path_file, mode='r') as file:
+            with open(path_file, mode='r', encoding = 'utf-8') as file:
                 reader = csv.reader(file)
                 rows = list(reader)
                 if 0 <= row_index < len(rows):
@@ -175,11 +175,11 @@ class CityDataBaseFinder:
         if not archivo_existente:
             pass
         else:
-            with open(file_path, 'r', newline='') as csv_file:
+            with open(file_path, 'r', newline='', encoding = 'utf-8') as csv_file:
                 reader = csv.reader(csv_file)
                 header = next(reader)
             
-                with open(file_path, 'w', newline='') as csv_file:
+                with open(file_path, 'w', newline='', encoding = 'utf-8') as csv_file:
                     writer = csv.writer(csv_file)
                     writer.writerow(header)
                 

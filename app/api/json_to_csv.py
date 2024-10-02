@@ -34,7 +34,7 @@ class JSONtoCSV:
         file_path = os.path.join(base_dir, 'Clima.csv')
 
         ciudad = jsonData.get("name")
-        with open(file_path, 'r', newline='') as csv_file:
+        with open(file_path, 'r', newline='', encoding = 'utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
                 if row["name"] == ciudad:
@@ -58,7 +58,7 @@ class JSONtoCSV:
         keys = jsonData.keys()
         values = jsonData.values()
         
-        with open(file_path, 'a', newline = '') as csv_file:
+        with open(file_path, 'a', newline = '', encoding = 'utf-8') as csv_file:
             writer = csv.writer(csv_file)
             
             if not archivo_existente:

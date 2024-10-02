@@ -132,7 +132,7 @@ class Recommendations():
         closest_difference = float('inf')
         recommendation = None
         
-        with open(csv_file, mode='r') as csv_file:
+        with open(csv_file, mode='r', encoding = 'utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
                 weather_value = float(row[file_name])
@@ -162,7 +162,7 @@ class Recommendations():
         base_dir = os.path.dirname(os.path.abspath(__file__))
         csv_file = os.path.join(base_dir, 'recomendTables', file_name+".csv")
     
-        with open(csv_file, mode='r') as csv_file:
+        with open(csv_file, mode='r', encoding = 'utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
                 weather_value = row[file_name]
