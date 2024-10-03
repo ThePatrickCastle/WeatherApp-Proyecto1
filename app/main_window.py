@@ -121,7 +121,7 @@ class MainWindow(QMainWindow):
         QComboBox {
         padding: 5px;
         font-size: 14px;
-        background-color: white;
+        background-color: #FFFFFF;
         color: black;
         }
         QComboBox::drop-down {
@@ -141,7 +141,7 @@ class MainWindow(QMainWindow):
         padding: 8px 16px;
         }
         QPushButton:hover {
-        background-color: #2980b9;
+        background-color: #130f2e;
         }
         """)
         
@@ -180,9 +180,9 @@ class MainWindow(QMainWindow):
         origen = Recommendations(estado_origen)
         destino = Recommendations(estado_destino)
 
+        #Obtención de información
         informacion_origen = origen.get_atributes()
         informacion_destino = destino.get_atributes()
-
         recomendaciones_destino = []
 
         if len(informacion_origen) != 0 and len(informacion_destino) != 0:
@@ -190,54 +190,62 @@ class MainWindow(QMainWindow):
         else:
             self.hayconexion = False
 
+        #Creando layout principal
         ventanadevuelo = QGridLayout()
+
         # Título del ticket
         ticketvuelo = QLabel(f"Ticket {self.cadenabuscar}")
-        ticketvuelo.setFont(QFont('Arial', 15, QFont.Bold))
+        ticketvuelo.setFont(QFont('Helvetica Neue', 15, QFont.Bold))
         ticketvuelo.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         ticketvuelo.setStyleSheet("""
         QLabel {
-            color: #007BFF;
+            color: #244775;
             padding: 10px;
             border-bottom: 2px solid #007BFF;
         }
         """)
         
-
+        #Etiquetas para origen y destino
         cdcomienza = QLabel(f" {iata_origen}, {estado_origen} ")
         cdcomienza.setFont(QFont('Times', 30))
         cdcomienza.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        
         hrllegada = QLabel(f" {iata_destino}, {estado_destino} ")
         hrllegada.setFont(QFont('Times', 30))
         hrllegada.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+
+        #Añadiendo widgets al layout
         ventanadevuelo.addWidget(ticketvuelo, 0, 1)
         ventanadevuelo.addWidget(cdcomienza, 1, 0)
         ventanadevuelo.addWidget(hrllegada, 1, 2)
-        avion = QLabel(" Avion ")
 
+        #Gráfico del avión
+        avion = QLabel(" Avion ")
         screen = QApplication.primaryScreen().geometry()
         screen_width = screen.width()
         screen_height = screen.height()
-
-        width_20_percent = int(screen_width * 0.10)
-        height_20_percent = int(screen_height * 0.10)
+        width_20_percent = int(screen_width * 0.1)
+        height_20_percent = int(screen_height * 0.20)
 
         avion_logo = QPixmap(os.path.join(basedir + "/ui/resources/Avion.png"))
         avion_logo = avion_logo.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
-
         avion.setPixmap(avion_logo)
         avion.setScaledContents(True)
         avion.setAlignment(Qt.AlignCenter)
 
         ventanadevuelo.addWidget(avion, 1, 1)
+
+        #Lista de clima y recomendaciones
         listaclimaida = QListWidget()
-        ventanadevuelo.addWidget(listaclimaida, 2, 0)
+#        ventanadevuelo.addWidget(listaclimaida, 2, 0)
         listarecomendar = QListWidget()
         listaclimallegada = QListWidget()
-        juntalistas = QVBoxLayout()
-        juntalistas.addWidget(listaclimallegada)
-        juntalistas.addWidget(listarecomendar)
+        
+        #juntalistas = QVBoxLayout()
+        #juntalistas.addWidget(listaclimallegada)
+        #juntalistas.addWidget(listarecomendar)
 
+        #Llenando listas
         for info in informacion_origen:
             listaclimaida.addItem(info)
 
@@ -247,9 +255,32 @@ class MainWindow(QMainWindow):
         for recommedation in recomendaciones_destino:
             listarecomendar.addItem(recommedation)
 
+        #Aplicando estilos a las listas
+        listaclimaida.setStyleSheet("""
+        QListWidget {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #ffffff;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        padding: 10px;
+        }
+        QListWidget::item {
+        padding: 10px;
+        border-bottom: 1px solid #007bff;
+        }
+        QListWidget::item::hover {
+        background-color: #e6f7ff;
+        }
+        """)
+        listaclimallegada.setStyleSheet(listaclimaida.styleSheet())
+        listarecomendar.setStyleSheet(listaclimaida.styleSheet())
 
+        juntalistas = QVBoxLayout()
+        juntalistas.addWidget(listaclimallegada)
+        juntalistas.addWidget(listarecomendar)
+        ventanadevuelo.addWidget(listaclimaida, 2, 0)
         ventanadevuelo.addLayout(juntalistas, 2, 2)
-
+        
         return ventanadevuelo
 
 
