@@ -271,6 +271,7 @@ class MainWindow(QMainWindow):
         #Creación del layout principal
         ventanadeciudad = QGridLayout()
         ventanadeciudad.setContentsMargins(0,0,0,0)
+        
         #Etiqueta principal
         nombreciudad = QLabel(f"Mostrando resultados para {cadenaLimpia}")
         nombreciudad.setObjectName("tituloCiudad")
