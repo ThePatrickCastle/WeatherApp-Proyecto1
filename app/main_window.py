@@ -6,7 +6,6 @@ Contributor: @C4mdax
 Version 1.1.1
 
 '''
-
 import sys, os
 
 import schedule
@@ -59,9 +58,9 @@ class MainWindow(QMainWindow):
         tabinicial = QGridLayout()
         barrasuperior = QHBoxLayout()
         barrabuscadora = QHBoxLayout()
-        self.setWindowTitle(" Weather App ")
-        logo = QLabel(" Weather Recommendations ")
-        logo.setFont(QFont('Times', 50))
+        self.setWindowTitle(" AeroNimbus ")
+        logo = QLabel(" AeroNimbus ")
+        logo.setFont(QFont('Arial', 50))
         logo.setAlignment(Qt.AlignLeft | Qt. AlignVCenter)
         imagenlogo = QLabel(" Imagen logo")
 
@@ -149,9 +148,19 @@ class MainWindow(QMainWindow):
             self.hayconexion = False
 
         ventanadevuelo = QGridLayout()
+        # Título del ticket
         ticketvuelo = QLabel(f"Ticket {self.cadenabuscar}")
-        ticketvuelo.setFont(QFont('Times', 15))
+        ticketvuelo.setFont(QFont('Arial', 15, QFont.Bold))
         ticketvuelo.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        ticketvuelo.setStyleSheet("""
+        QLabel {
+            color: #007BFF;
+            padding: 10px;
+            border-bottom: 2px solid #007BFF;
+        }
+        """)
+        
+
         cdcomienza = QLabel(f" {iata_origen}, {estado_origen} ")
         cdcomienza.setFont(QFont('Times', 30))
         cdcomienza.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
@@ -216,19 +225,25 @@ class MainWindow(QMainWindow):
         else:
             self.hayconexion = False
 
+        #Creación del layout principal
         ventanadeciudad = QGridLayout()
+
+        #Etiqueta principal
         nombreciudad = QLabel(f"Mostrando resultados para {cadenaLimpia}")
-        nombreciudad.setFont(QFont('Times', 20))
-        nombreciudad.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        ventanadeciudad.addWidget(nombreciudad, 0, 0, 1, 2, Qt.AlignCenter)       
+        nombreciudad.setObjectName("tituloCiudad")
+        ventanadeciudad.addWidget(nombreciudad, 0, 0, 1, 2, Qt.AlignCenter)
+  
+        #Informacion de la ciudad
         textoclimas = QLabel(f" Información de {cadenaLimpia} ")
-        textoclimas.setFont(QFont('Times', 20))
-        textoclimas.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        textoclimas.setObjectName("subtitulo")
         ventanadeciudad.addWidget(textoclimas, 1, 0)
+
+
         textorecomendaciones = QLabel(" Recomendaciones: ")
-        textorecomendaciones.setFont(QFont('Times', 20))
-        textorecomendaciones.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        textorecomendaciones.setObjectName("subtitulo")
         ventanadeciudad.addWidget(textorecomendaciones, 1, 1)
+
+
         listaclimas = QListWidget()
         listarecomendar = QListWidget()
         ventanadeciudad.addWidget(listaclimas, 2, 0)
@@ -240,6 +255,38 @@ class MainWindow(QMainWindow):
         for recommendation in recomendaciones_ciudad:
             listarecomendar.addItem(recommendation)
 
+        estilo = """
+        #tituloCiudad {
+        font-size: 24px;
+        font-family: 'Elvetica Neue', Arial, sans-serif;
+        font-weight: bold;
+        text-align: center;
+        }
+
+        #subtitulo {
+        font-size: 20px;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        color: #555;
+        }
+
+        QListWidget {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        }
+
+        QListWidget::item {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+        }
+
+        QListWidget::item:hover {
+        background-color: #f0f0f0;
+        }
+        """
+        self.setStyleSheet(estilo)
         return ventanadeciudad
 
 
