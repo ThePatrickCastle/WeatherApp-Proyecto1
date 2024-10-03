@@ -1,10 +1,11 @@
 """
 Modulo de Recomendaciones
 Author: @ThePatrickCastle
-Version 1.0.1
+Version 1.0.2
 
 """
 import csv
+import os
 
 from .api_requests import APIRequest
 from .json_to_csv import JSONtoCSV 
@@ -23,6 +24,7 @@ class Recommendations():
     * get_number_atribute_Recommendation(file_name, atributeNo)
     * get_string_atribute_Recommentation(file_name, atributeNo)
     * get_recommendations()
+    * limpiar_base_de_datos()
     
     Atributos
     ---------
@@ -44,6 +46,7 @@ class Recommendations():
         """
         self.noArgumentos = len(args)
         self.llave = "310e40947f292086c33d04e2f959e7f8"
+        self.header_atributes = []
         self.atributes = []
         self.recomendaciones = []
 
@@ -62,24 +65,33 @@ class Recommendations():
         Método que se asegura que el objeto agregue a la base de datos Clima.csv su ciudad y recupere su informacion en formato de lista
 
         """
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
         if self.noArgumentos == 1:
             if cityFinder.buscar_Ciudad(self.nombre_Ciudad):
                localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
-               self.atributes = cityFinder.get_Parametros(localizacion)
+               self.header_atributes = cityFinder.get_Parametros(file_path, 0)
+               self.atributes = cityFinder.get_Parametros(file_path, localizacion)
             else:
                nuevoJSON = APIRequest.get_formated_JSON(self.llave, 0, 0, self.nombre_Ciudad)
-               JSONtoCSV.append_JSON(nuevoJSON)
-               localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
-               self.atributes = cityFinder.get_Parametros(localizacion)
+               if nuevoJSON is not None:
+                   JSONtoCSV.append_JSON(nuevoJSON)
+                   localizacion = cityFinder.get_Indice_Ciudad(self.nombre_Ciudad)
+                   self.header_atributes = cityFinder.get_Parametros(file_path, 0)
+                   self.atributes = cityFinder.get_Parametros(file_path, localizacion)
         else:
             if cityFinder.buscar_Coordenadas(self.latitud, self.longitud):
                 localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
-                self.atributes = cityFinder.get_Parametros(localizacion)
+                self.header_atributes = cityFinder.get_Parametros(file_path, 0)
+                self.atributes = cityFinder.get_Parametros(file_path, localizacion)
             else:
                 nuevoJSON = APIRequest.get_formated_JSON(self.llave, self.latitud, self.longitud, "")
-                JSONtoCSV.append_JSON(nuevoJSON)
-                localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
-                self.atributes = cityFinder.get_Parametros(localizacion)
+                if nuevoJSON is not None:
+                    JSONtoCSV.append_JSON(nuevoJSON)
+                    localizacion = cityFinder.get_Indice_Coordenadas(self.latitud, self.longitud)
+                    self.header_atributes = cityFinder.get_Parametros(file_path, 0)
+                    self.atributes = cityFinder.get_Parametros(file_path, localizacion)
 
     
     def get_atributes(self):
@@ -90,7 +102,13 @@ class Recommendations():
         recomendaciones (list): Lista que contiene todos los elementos de la fila de un registro en Clima.csv
         
         """
-        return self.atributes
+        formato_amigable = []
+
+        if len(self.header_atributes) == len(self.atributes):
+            for i in range(len(self.header_atributes)):
+                formato_amigable.append(self.header_atributes[i].title() + ": " + self.atributes[i]) 
+        
+        return formato_amigable
 
       
     def get_number_atribute_Recomendation(self, file_name, atributeNo):
@@ -106,12 +124,15 @@ class Recommendations():
 
         """
         target_value = float(self.atributes[atributeNo])
-        csv_file = "./api/recomendTables/"+file_name+".csv"
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(base_dir, 'recomendTables', file_name+".csv")
+
         closest_weather = None
         closest_difference = float('inf')
         recommendation = None
         
-        with open(csv_file, mode='r') as csv_file:
+        with open(csv_file, mode='r', encoding = 'utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
                 weather_value = float(row[file_name])
@@ -137,9 +158,11 @@ class Recommendations():
 
         """
         target_value = self.atributes[atributeNo]
-        csv_file = "./api/recomendTables/"+file_name+".csv"
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(base_dir, 'recomendTables', file_name+".csv")
     
-        with open(csv_file, mode='r') as csv_file:
+        with open(csv_file, mode='r', encoding = 'utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
                 weather_value = row[file_name]
@@ -178,6 +201,7 @@ class Recommendations():
 
     def limpiar_base_de_datos():
         cityFinder.formatear_CSV()
+
         
 
 

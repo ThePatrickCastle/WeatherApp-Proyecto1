@@ -1,3 +1,4 @@
+
 # Weather App
 
 Weather App is a Python-based desktop application that provides real-time weather information for various cities. It uses a PyQt-powered user interface, retrieves data from weather APIs, and offers recommendations based on current weather conditions. The app uses a `.csv` database for data management.
@@ -10,12 +11,26 @@ Weather App is a Python-based desktop application that provides real-time weathe
 
 ## Installation
 
-### Prerequisites
+### For Regular Users
+
+If you just want to use the app, follow these steps:
+
+1. Go to the `executables` folder.
+2. Download the appropriate version of the app for your system:
+   - For Windows: `Weather App.exe`
+   - For Linux: `Weather App`
+3. Run the downloaded file to launch the application.
+
+### For Developers
+
+To build or modify the application, follow these steps:
+
+#### Prerequisites
 - Python 3.x
 - Virtual Environment (optional but recommended)
 - Required Python packages listed in `requirements.txt`
 
-### Steps
+#### Steps
 
 1. Clone the repository:
     ```bash
@@ -48,10 +63,8 @@ Weather App is a Python-based desktop application that provides real-time weathe
     ```
 
 6. Run the app:
-	```bash
-    cd ./app
-    ```
     ```bash
+    cd ./app
     python ./main_window.py
     ```
 
@@ -63,13 +76,12 @@ It is free for personal or commercial use with attribution required by mentionin
 > This site or product includes IP2Location™ ISO 3166-2 Subdivision Code which is available from [IP2Location](https://www.ip2location.com).
 
 ## Contributors
-- **Luis Angel Moreno Delgado**
-- **Edgar Salgado González**
-- **Patricio Salvador González Castillo**
+- **Patricio Salvador González Castillo** - Lead Developer & Project Manager
+- **Luis Angel Moreno Delgado** - Database Architect & Graphic Designer Strategist
+- **Edgar Salgado González** - UI/UX Designer & Usability Analyst
 
 ## Contributing
 Contributions are welcome! Please follow the typical fork-branch-pull request model. Make sure to check any open issues before starting your work.
 
 ## Contact
 For any questions or suggestions, please reach out at **patriciosalvador@ciencias.unam.mx**.
-

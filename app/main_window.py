@@ -3,7 +3,7 @@ Modulo Interacción entre el usuario y la aplicación, así como las acciones qu
 Author: @Edgar Salgado González
 Contributor: @ThePatrickCastle
 Contributor: @C4mdax
-Version 1.0
+Version 1.1.1
 
 '''
 
@@ -31,14 +31,40 @@ basedir = os.path.dirname(__file__)
 class MainWindow(QMainWindow):
     '''
     Clase MainWindow. La ventana principal con la que interactua el usuario del programa
-    
+
     '''
     def __init__(self):
         super().__init__()
+        self.hayconexion = True
         self.tipodebusqueda = 0
         self.cadenabuscar = ""
         self.numerotabs = 0
         self.tabPrincipal = QStackedLayout()
+        tabdesplegado = self.creador_tab()
+        capainicial = QWidget()
+        capainicial.setLayout(tabdesplegado)
+        self.tabPrincipal.addWidget(capainicial)
+        capafinal = QWidget()
+        capafinal.setLayout(self.tabPrincipal)
+        self.setCentralWidget(capafinal)
+        self.setMinimumSize(1000, 700)
+        self.setMaximumSize(1000, 700)
+
+    def resource_path(self, relative_path):
+        """
+        Funcion para obtener la direccion absoluta de las imagenes en el ejecutable
+        """
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative_path)
+        else:
+            return os.path.join(os.path.abspath("."), relative_path)
+
+    def creador_tab(self):
+        '''
+        @func creador_tab crea una nueva tab con el sub-menú ya desplegado o sin desplegar, por
+        si es nuevo uso o no
+        @param self, siendo una referencia a la ventana principal
+        '''
         tabinicial = QGridLayout()
         barrasuperior = QHBoxLayout()
         barrabuscadora = QHBoxLayout()
@@ -51,43 +77,46 @@ class MainWindow(QMainWindow):
         screen = QApplication.primaryScreen().geometry()
         screen_width = screen.width()
         screen_height = screen.height()
-        
+
         width_20_percent = int(screen_width * 0.15)
         height_20_percent = int(screen_height * 0.15)
+
+        direccion_logo = os.path.join(basedir, 'ui', 'resources', 'weather_app_logo_sin_fondo.png')
         
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/weather_app_logo_sin_fondo.png"))
-        imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
-        
-        imagenlogo.setPixmap(imagenlogoeditable)
+        imagenlogoeditable = QPixmap(self.resource_path(direccion_logo))
+        Imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
+
+        imagenlogo.setPixmap(Imagenlogoeditable)
         imagenlogo.setAlignment(Qt.AlignCenter)
 
         barrasuperior.addWidget(imagenlogo)
         barrasuperior.addWidget(logo)
         tabinicial.addLayout(barrasuperior, 0, 0)
         tabinicial.addLayout(barrabuscadora, 1, 0)
-        listacoincidentes = QListWidget()
-        tabinicial.addWidget(listacoincidentes, 2, 0)
         self.barraescritura = QLineEdit()
+        self.barraescritura.setMaxLength(40)
         self.barraescritura.setPlaceholderText(" Por favor, elige una opción ")
         barrabuscadora.addWidget(self.barraescritura)
+
+        self.barraescritura.setPlaceholderText(" Escribe tu ciudad ")
+        reader = InputCleaner(self.cadenabuscar)
+        results = reader.get_results()
+        completarbusqueda = QCompleter(results)
+        completarbusqueda.setMaxVisibleItems(4)
+
+        completarbusqueda.activated.connect(self.realizar_busqueda)
+
+        self.barraescritura.setCompleter(completarbusqueda)               
         self.barraescritura.textEdited.connect(self.guardar_busqueda)
-        self.barraescritura.returnPressed.connect(self.realizar_busqueda)
+
         self.listadebusqueda = QComboBox()
-        self.listadebusqueda.addItems(["Opciones", "Vuelo", "Ciudad"])
+        self.listadebusqueda.addItems(["Ciudad", "Vuelo"])
         self.listadebusqueda.currentIndexChanged.connect(self.cambiar_tipo_busqueda)
         barrabuscadora.addWidget(self.listadebusqueda)
         botonbuscar = QPushButton("Buscar")
         botonbuscar.pressed.connect(self.realizar_busqueda)
         barrabuscadora.addWidget(botonbuscar)
-        capainicial = QWidget()
-        capainicial.setLayout(tabinicial)
-        self.tabPrincipal.addWidget(capainicial)
-        capafinal = QWidget()
-        capafinal.setLayout(self.tabPrincipal)
-        self.setCentralWidget(capafinal)
-        # Bloqueamos el tamaño de la ventana para no tener errores indeseados en los formatos, por ahora.
-        self.setMinimumSize(1000, 700)
-        self.setMaximumSize(1000, 700)
+        return tabinicial
 
     def cambiar_tipo_busqueda(self, indice):
         '''
@@ -95,30 +124,23 @@ class MainWindow(QMainWindow):
         determinemos que tipo de busqueda se realizará
         @param self, indice. self siendo la ventana principal en sí. indice siendo el índice de la QComboBox elegida
         '''
-        if indice == 2:
-            self.tipodebusqueda = 2
+        if indice == 0:
+            self.tipodebusqueda = 0
             self.barraescritura.setPlaceholderText(" Escribe tu ciudad ")
-            ciudades = ["Valencia", "Madrid", "Tokyo", "Monterrey"]
-            completarbusqueda = QCompleter(ciudades)
-            self.barraescritura.setCompleter(completarbusqueda)
+
         if indice == 1:
             self.tipodebusqueda = 1
-            vuelos = ["00000", "11111", "22222", "33333"]
-            completarbusqueda = QCompleter(vuelos)
             self.barraescritura.setPlaceholderText(" Escribe tu ticket ")
-            self.barraescritura.setCompleter(completarbusqueda)
-        if indice == 0:
-            self.barraescritura.setPlaceholderText(" Por favor, elige una opción")
 
 
-    def guardar_busqueda(self, cadenarecibida): 
+    def guardar_busqueda(self, cadenarecibida):
         '''
         @func guardar_busqueda guarda en cadenabuscar lo escrito en la QLineEdit barraescritora en tiempo real, o sea, que
         guarda en la variable al mismo tiempo que se escribe
         @param self, cadenarecibida. self siendo el programa en sí. cadenarecibida siendo la cadena escrita en barraescritora
         '''
         self.cadenabuscar = cadenarecibida
-    
+
     def ventana_vuelo(self,iata_origen, estado_origen, iata_destino, estado_destino):
         '''
         @func ventana_vuelo crea a partir de la cadena recibida un nuevo tab con todo lo que se necesita desplegar
@@ -128,11 +150,15 @@ class MainWindow(QMainWindow):
         destino = Recommendations(estado_destino)
 
         informacion_origen = origen.get_atributes()
-
         informacion_destino = destino.get_atributes()
-        recomendaciones_destino = destino.get_recommendations() 
-        
-        
+
+        recomendaciones_destino = []
+
+        if len(informacion_origen) != 0 and len(informacion_destino) != 0:
+            recomendaciones_destino = destino.get_recommendations()
+        else:
+            self.hayconexion = False
+
         ventanadevuelo = QGridLayout()
         ticketvuelo = QLabel(f"Ticket {self.cadenabuscar}")
         ticketvuelo.setFont(QFont('Times', 15))
@@ -151,13 +177,14 @@ class MainWindow(QMainWindow):
         screen = QApplication.primaryScreen().geometry()
         screen_width = screen.width()
         screen_height = screen.height()
-        
+
         width_20_percent = int(screen_width * 0.10)
         height_20_percent = int(screen_height * 0.10)
-        
-        avion_logo = QPixmap(os.path.join(basedir + "/ui/resources/Avion.png"))
+
+        direccion_avion = os.path.join(basedir, 'ui', 'resources', 'Avion.png')
+        avion_logo = QPixmap(self.resource_path(direccion_avion))
         avion_logo = avion_logo.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
-        
+
         avion.setPixmap(avion_logo)
         avion.setScaledContents(True)
         avion.setAlignment(Qt.AlignCenter)
@@ -173,36 +200,39 @@ class MainWindow(QMainWindow):
 
         for info in informacion_origen:
             listaclimaida.addItem(info)
-            
+
         for info in informacion_destino:
             listaclimallegada.addItem(info)
 
         for recommedation in recomendaciones_destino:
             listarecomendar.addItem(recommedation)
-            
+
 
         ventanadevuelo.addLayout(juntalistas, 2, 2)
-        botonAtras = QPushButton("Atras")
-        botonAtras.resize(150, 50)
-        botonAtras.clicked.connect(self.regresar_pantalla_principal)
-        ventanadevuelo.addWidget(botonAtras, 0, 0)
+
         return ventanadevuelo
 
 
     def ventana_ciudad(self, cadenaLimpia):
-        ''' 
+        '''
         @func ventana_ciudad crea a partir de la cadena recibida un nuevo tab con todo lo que se necesita desplegar
         para la ventana de la ciudad
         '''
         ciudad = Recommendations(cadenaLimpia)
+
         informacion_ciudad = ciudad.get_atributes()
-        recomendaciones_ciudad = ciudad.get_recommendations()
+        recomendaciones_ciudad = []
+
+        if len(informacion_ciudad) != 0:
+            recomendaciones_ciudad = ciudad.get_recommendations()
+        else:
+            self.hayconexion = False
 
         ventanadeciudad = QGridLayout()
-        nombreciudad = QLabel(cadenaLimpia)
+        nombreciudad = QLabel(f"Mostrando resultados para {cadenaLimpia}")
         nombreciudad.setFont(QFont('Times', 20))
         nombreciudad.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        ventanadeciudad.addWidget(nombreciudad, 0, 1)
+        ventanadeciudad.addWidget(nombreciudad, 0, 0, 1, 2, Qt.AlignCenter)       
         textoclimas = QLabel(f" Información de {cadenaLimpia} ")
         textoclimas.setFont(QFont('Times', 20))
         textoclimas.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
@@ -218,44 +248,30 @@ class MainWindow(QMainWindow):
         
         for info in informacion_ciudad:
             listaclimas.addItem(info)
-            
+                
         for recommendation in recomendaciones_ciudad:
             listarecomendar.addItem(recommendation)
-                            
-        botonAtras = QPushButton("Atras")
-        botonAtras.resize(150, 50)
-        botonAtras.clicked.connect(self.regresar_pantalla_principal)
-        ventanadeciudad.addWidget(botonAtras, 0, 0)
+
         return ventanadeciudad
-
-    def regresar_pantalla_principal(self):
-        ''' 
-        @function regresar_pantalla_principal regresa desde el tab actual hasta el inicial
-        '''
-        self.tipodebusqueda = 0
-        self.listadebusqueda.setCurrentIndex(0)
-        self.barraescritura.clear()
-        self.tabPrincipal.setCurrentIndex(0)
-
-
-    def null_tipo_busqueda(self):
-        ''' 
-        @function null_tipo_busqueda lanza un pop up al usuario que le advierte que su elección es vacia
-        '''
-        mensajeerror = QMessageBox.critical(self,"Selección nula", " Por favor, elige una opción ", buttons = QMessageBox.Ok)
 
 
     def null_cadenabuscar(self):
-        ''' 
+        '''
          @function null_cadenabuscar lanza un pop up al usuario que le advierte que su cadena es vacia
         '''
         mensajeerror = QMessageBox.critical(self, "Entrada nula", " La entrada es nula  ", buttons = QMessageBox.Ok)
 
     def cadena_no_encontrada(self):
-        ''' 
-        @function cadena_no_encontrada lanza un pop_up que advierte al usuario que su cadena no fue encontrada 
+        '''
+        @function cadena_no_encontrada lanza un pop_up que advierte al usuario que su cadena no fue encontrada
         '''
         mensajeerror = QMessageBox.critical(self, "Not Found",  "La cadena no ha sido encontrada, intente nuevamente", buttons = QMessageBox.Ok)
+
+    def request_fallida(self):
+        '''
+        @function request_fallida lanza un pop_up que advierte al usuario que revise su conexión a internet
+        '''
+        mensajeerror = QMessageBox.critical(self, "None Request",  "Request a servidor fallida, verifique su conexión a internet. Si no funciona, eliga otra ciudad", buttons = QMessageBox.Ok)
 
 
     def realizar_busqueda(self):
@@ -264,51 +280,63 @@ class MainWindow(QMainWindow):
         se ejecuta la busqueda, que por el momento solo checa que se haya seleccionado una opción, que la cadena
         no sea vacia y que no sea igual a Cadenanoencontrada, después de eso despliega una ventana provisional de vuelo
         o ciudad
-        '''
-        self.capanueva = QWidget()
 
-        if self.tipodebusqueda == 0:
-            self.null_tipo_busqueda()
-            return
+        '''
+
+        temp = self.barraescritura.text()
+
+        tabnueva = self.creador_tab()
 
         if self.cadenabuscar == "":
             self.null_cadenabuscar()
-            return
-    
+
         if self.tipodebusqueda == 1:
-            finder = TicketFinder("./data/finder/vuelos.csv")
+            
+            csv_path = os.path.join(basedir, 'data', 'finder', 'vuelos.csv')
+
+            finder = TicketFinder(self.resource_path(csv_path))
             codigos_iata = finder.read_ticket(self.cadenabuscar)
             if codigos_iata == "Ticket de vuelo no encontrado":
                 self.cadena_no_encontrada()
-                return
             else:
                 reader_origen = InputCleaner(codigos_iata[0])
-                estado_origen = reader_origen.encontrar_mejor_apareamiento()                
+                estado_origen = reader_origen.encontrar_mejor_apareamiento()
                 reader_destino = InputCleaner(codigos_iata[1])
                 estado_destino = reader_destino.encontrar_mejor_apareamiento()
 
-                self.capanueva.setLayout(self.ventana_vuelo(codigos_iata[0], estado_origen, codigos_iata[1], estado_destino))
+                tabnueva.addLayout(self.ventana_vuelo(codigos_iata[0], estado_origen, codigos_iata[1], estado_destino), 2, 0)
+            
 
-
-        elif self.tipodebusqueda == 2:
+        elif self.tipodebusqueda == 0:
+            self.cadenabuscar = temp
             reader = InputCleaner(self.cadenabuscar)
-            cadenaLimpia = reader.encontrar_mejor_apareamiento()      
-            
+            cadenaLimpia = reader.encontrar_mejor_apareamiento()
+
             if cadenaLimpia == "No valid match found":
-                self.cadena_no_encontrada()                       
-                return
+                self.cadena_no_encontrada()
             else:
-                self.capanueva.setLayout(self.ventana_ciudad(cadenaLimpia))
-            
-        self.tabPrincipal.addWidget(self.capanueva)
+                tabnueva.addLayout(self.ventana_ciudad(cadenaLimpia), 2, 0)
+
+
+        capanueva = QWidget()
+        capanueva.setLayout(tabnueva)
+        self.tabPrincipal.addWidget(capanueva)
         self.numerotabs += 1
         self.tabPrincipal.setCurrentIndex(self.numerotabs)
-        
-    
+
+        self.listadebusqueda.setCurrentIndex(0)
+        self.tipodebusqueda = 0
+
+        if not self.hayconexion:
+            self.request_fallida()
+            self.hayconexion = True
+            return
+
+
 
 def borrar_datos():
     Recommendations.limpiar_base_de_datos()
-        
+
 schedule.every(20).minutes.do(borrar_datos)
 
 app = QApplication(sys.argv)
@@ -321,5 +349,3 @@ ventana_abierta = True
 while ventana_abierta:
     schedule.run_pending()
     ventana_abierta = False
-
-

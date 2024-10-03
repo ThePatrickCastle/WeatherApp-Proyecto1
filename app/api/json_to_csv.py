@@ -30,8 +30,11 @@ class JSONtoCSV:
         (bool): Verdadero si es que no está en el Clima.csv, y falso si está en el Clima.csv
         
         """
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
         ciudad = jsonData.get("name")
-        with open("./api/Clima.csv", 'r', newline='') as csv_file:
+        with open(file_path, 'r', newline='', encoding = 'utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
                 if row["name"] == ciudad:
@@ -47,12 +50,15 @@ class JSONtoCSV:
         jsonData (diccionario): El conjunto de datos que queremos agregar a Clima.csv
         
         """
-        archivo_existente = os.path.isfile("./api/Clima.csv")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(base_dir, 'Clima.csv')
+
+        archivo_existente = os.path.isfile(file_path)
         
         keys = jsonData.keys()
         values = jsonData.values()
         
-        with open("./api/Clima.csv", 'a', newline = '') as csv_file:
+        with open(file_path, 'a', newline = '', encoding = 'utf-8') as csv_file:
             writer = csv.writer(csv_file)
             
             if not archivo_existente:
