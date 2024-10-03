@@ -55,15 +55,19 @@ class MainWindow(QMainWindow):
         si es nuevo uso o no
         @param self, siendo una referencia a la ventana principal
         '''
+        self.setStyleSheet("background-color: #FFFFFF;")
         tabinicial = QGridLayout()
         barrasuperior = QHBoxLayout()
         barrabuscadora = QHBoxLayout()
         self.setWindowTitle(" AeroNimbus ")
-        logo = QLabel(" AeroNimbus ")
-        logo.setFont(QFont('Arial', 50))
-        logo.setAlignment(Qt.AlignLeft | Qt. AlignVCenter)
-        imagenlogo = QLabel(" Imagen logo")
 
+        #Modernizando logo
+        logo = QLabel(" AeroNimbus ")
+        logo.setFont(QFont('Montserrat', 40))
+        logo.setStyleSheet("color: #244775; font-weight: bold;")
+        logo.setAlignment(Qt.AlignLeft | Qt. AlignVCenter)
+        
+        imagenlogo = QLabel(" Imagen logo")
         screen = QApplication.primaryScreen().geometry()
         screen_width = screen.width()
         screen_height = screen.height()
@@ -71,7 +75,7 @@ class MainWindow(QMainWindow):
         width_20_percent = int(screen_width * 0.15)
         height_20_percent = int(screen_height * 0.15)
 
-        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/weather_app_logo_sin_fondo.png"))
+        imagenlogoeditable = QPixmap(os.path.join(basedir + "/ui/resources/aero_nimbus_simple_logo.png"))
         Imagenlogoeditable = imagenlogoeditable.scaled(width_20_percent, height_20_percent, Qt.KeepAspectRatio)
 
         imagenlogo.setPixmap(Imagenlogoeditable)
@@ -79,29 +83,68 @@ class MainWindow(QMainWindow):
 
         barrasuperior.addWidget(imagenlogo)
         barrasuperior.addWidget(logo)
+
         tabinicial.addLayout(barrasuperior, 0, 0)
         tabinicial.addLayout(barrabuscadora, 1, 0)
+
+        #Modernizando la barra de búsqueda
         self.barraescritura = QLineEdit()
         self.barraescritura.setMaxLength(40)
-        self.barraescritura.setPlaceholderText(" Por favor, elige una opción ")
+        self.barraescritura.setPlaceholderText(" Escribe tu ciudad ")
+        self.barraescritura.setStyleSheet("""
+        QLineEdit {
+        border: 2px solid #8C7B3A;
+        border-radius: 15px;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #ffffff;
+        }
+        QLineEdit::focus {
+        border: 2px solid #244775;
+        }
+        """)
+
         barrabuscadora.addWidget(self.barraescritura)
 
-        self.barraescritura.setPlaceholderText(" Escribe tu ciudad ")
+        #self.barraescritura.setPlaceholderText(" Escribe tu ciudad ")
         reader = InputCleaner(self.cadenabuscar)
         results = reader.get_results()
         completarbusqueda = QCompleter(results)
         completarbusqueda.setMaxVisibleItems(4)
-
         completarbusqueda.activated.connect(self.realizar_busqueda)
-
         self.barraescritura.setCompleter(completarbusqueda)               
         self.barraescritura.textEdited.connect(self.guardar_busqueda)
-
+        
         self.listadebusqueda = QComboBox()
         self.listadebusqueda.addItems(["Ciudad", "Vuelo"])
+        self.listadebusqueda.setStyleSheet("""
+        QComboBox {
+        padding: 5px;
+        font-size: 14px;
+        background-color: white;
+        color: black;
+        }
+        QComboBox::drop-down {
+        width: 20px;
+        background-color: #FFFFFF;
+        }
+        """)
         self.listadebusqueda.currentIndexChanged.connect(self.cambiar_tipo_busqueda)
         barrabuscadora.addWidget(self.listadebusqueda)
+        
         botonbuscar = QPushButton("Buscar")
+        botonbuscar.setStyleSheet("""
+        QPushButton {
+        background-color: #244775;
+        color: white;
+        border-radius: 12px;
+        padding: 8px 16px;
+        }
+        QPushButton:hover {
+        background-color: #2980b9;
+        }
+        """)
+        
         botonbuscar.pressed.connect(self.realizar_busqueda)
         barrabuscadora.addWidget(botonbuscar)
         return tabinicial
@@ -227,7 +270,7 @@ class MainWindow(QMainWindow):
 
         #Creación del layout principal
         ventanadeciudad = QGridLayout()
-
+        ventanadeciudad.setContentsMargins(0,0,0,0)
         #Etiqueta principal
         nombreciudad = QLabel(f"Mostrando resultados para {cadenaLimpia}")
         nombreciudad.setObjectName("tituloCiudad")
@@ -243,7 +286,6 @@ class MainWindow(QMainWindow):
         textorecomendaciones.setObjectName("subtitulo")
         ventanadeciudad.addWidget(textorecomendaciones, 1, 1)
 
-
         listaclimas = QListWidget()
         listarecomendar = QListWidget()
         ventanadeciudad.addWidget(listaclimas, 2, 0)
@@ -258,7 +300,7 @@ class MainWindow(QMainWindow):
         estilo = """
         #tituloCiudad {
         font-size: 24px;
-        font-family: 'Elvetica Neue', Arial, sans-serif;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
         font-weight: bold;
         text-align: center;
         }
@@ -266,12 +308,12 @@ class MainWindow(QMainWindow):
         #subtitulo {
         font-size: 20px;
         font-family: 'Helvetica Neue', Arial, sans-serif;
-        color: #555;
+        color: #244775;
         }
 
         QListWidget {
         font-family: 'Helvetica Neue', Arial, sans-serif;
-        background-color: #f9f9f9;
+        background-color: #FFFFFF;
         border: 1px solid #ddd;
         border-radius: 4px;
         padding: 5px;
@@ -279,11 +321,11 @@ class MainWindow(QMainWindow):
 
         QListWidget::item {
         padding: 8px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #244775;
         }
 
         QListWidget::item:hover {
-        background-color: #f0f0f0;
+        background-color: #FFFFFF;
         }
         """
         self.setStyleSheet(estilo)
