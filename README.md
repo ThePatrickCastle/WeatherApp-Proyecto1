@@ -76,9 +76,9 @@ It is free for personal or commercial use with attribution required by mentionin
 > This site or product includes IP2Location™ ISO 3166-2 Subdivision Code which is available from [IP2Location](https://www.ip2location.com).
 
 ## Contributors
-- **Patricio Salvador González Castillo** - Lead Developer & Project Manager
-- **Luis Angel Moreno Delgado** - Database Architect & Graphic Designer Strategist
-- **Edgar Salgado González** - UI/UX Designer & Usability Analyst
+- **@ThePatrickCastle** - Lead Developer & Project Manager
+- **@C4mdax** - Database Architect & Graphic Designer Strategist
+- **@Edgar Salgado González** - UI/UX Designer & Usability Analyst
 
 ## Contributing
 Contributions are welcome! Please follow the typical fork-branch-pull request model. Make sure to check any open issues before starting your work.
